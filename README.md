@@ -2,16 +2,18 @@
 
 Official website and digital portal for **Kuchipudi Heritage Arts Society** — preserving, presenting, and celebrating the classical Indian dance form originating from the historic Kuchipudi village, Andhra Pradesh, India.
 
-🌐 **Website:** [kuchipudiheritage.com](https://kuchipudiheritage.com/)
+🌐 **Website:** [kuchipudiheritage.com](https://kuchipudiheritage.com/) (planned domain)
+
+> **Status: pre-launch, not live yet.** The registration portal runs in test mode: the Razorpay payment step is a mock, and no registrations are saved. See the launch checklist in [CLAUDE.md](CLAUDE.md) for what must be done before going live.
 
 ---
 
 ## 🎭 Overview
 
-A modern, fast, and accessible static website representing the timeless tradition of Kuchipudi. The platform provides comprehensive educational resources on Kuchipudi history, repertoire, the 15 legendary gurus, the Kuchipudi flag symbolism, and an online registration portal for institutions and performers for **Geeta Saaram Natya Vedam 2026**.
+A modern, fast, and accessible static website representing the timeless tradition of Kuchipudi. The platform provides comprehensive educational resources on Kuchipudi history, repertoire, the 15 legendary gurus, the Kuchipudi flag symbolism, and an online registration portal (test mode until launch) for institutions and performers for **Geeta Saaram Natya Vedam 2026**.
 
 ### Key Pages & Features
-- **Home (`public/index.html`)**: Society mission, traditional curtain (*tera*) entrance animation, festival countdown to 25 December 2026, and guru highlights.
+- **Home (`public/index.html`)**: Society mission, traditional curtain (*tera*) entrance animation, countdown to the Confluence opening on 25 December 2026, and guru highlights.
 - **Kuchipudi Dance (`public/kuchipudi-dance/index.html`)**: Complete guide to Kuchipudi dance origins, Natyashastra foundation, expressions (*Abhinaya*), and movements.
 - **History (`public/kuchipudi-history/index.html`)**: Chronological journey tracing Siddhendra Yogi, the Bhagavata Melas, court patronage, and the 20th-century renaissance.
 - **Legendary Gurus (`public/kuchipudi-gurus/index.html`)**: Biographies and portraits honoring 15 master gurus of the Kuchipudi tradition.
@@ -66,6 +68,7 @@ kuchipudiheritage.com/
 │   ├── build.py                           # Python build and validation script
 │   └── data.py                            # Centralized site data and metadata
 ├── .gitignore                             # Git ignore rules
+├── CLAUDE.md                              # Project status, launch checklist, notes for agents
 ├── LICENSE                                # Apache 2.0 License
 ├── package.json                           # Development scripts
 └── README.md                              # Project documentation
@@ -99,7 +102,8 @@ npm run build
 - **Address:** D.No. 2-86, Kuchipudi Village, Movva Mandal, Krishna District, Andhra Pradesh 521136, India
 - **Phone:** +91 90322 28439
 - **Email:** info.kuchipudiheritage@gmail.com
-- **Festival:** Geeta Saaram Natya Vedam — 25 December 2026, 10:00 AM IST
+- **Festival:** International Kuchipudi Dance Confluence: 25 to 27 December 2026
+- **Geeta Saaram Natya Vedam:** 27 December 2026, reporting 10:00 AM IST (applications close 30 November 2026)
 
 ---
 

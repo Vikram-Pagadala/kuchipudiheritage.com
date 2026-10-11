@@ -788,6 +788,26 @@ a.frame:hover img { transform: scale(1.05); }
   margin-bottom: 20px;
 }
 
+/* PRE-LAUNCH: shown while the portal is a mock. Remove with the mock. */
+.reg-test-note {
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  border: 1px dashed var(--gold);
+  border-radius: 8px;
+  color: var(--gold-light);
+  font-size: 0.9rem;
+}
+.form-error {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border-left: 3px solid #ff8585;
+  background: rgba(255, 133, 133, 0.1);
+  color: #ffd0d0;
+  font-size: 0.92rem;
+}
+.form-error[hidden] { display: none; }
+#registrationForm [aria-invalid="true"] { border-color: #ff8585; }
+
 /* Radio Cards */
 .radio-group.cards {
   display: grid;
@@ -1122,7 +1142,7 @@ a.frame:hover img { transform: scale(1.05); }
   justify-content: space-between;
   align-items: center;
 }
-.rzp-header img { height: 22px; width: auto; }
+.rzp-brand { color: #fff; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.01em; }
 .rzp-close {
   background: none;
   border: none;

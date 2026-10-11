@@ -310,33 +310,47 @@
       });
     }
 
+    // Show (or clear, with no message) the error line of the current step.
+    function showError(message) {
+      var section = doc.getElementById('step-' + regState.currentStep);
+      var box = section && section.querySelector('.form-error');
+      if (!box) return;
+      box.textContent = message || '';
+      box.hidden = !message;
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
     function nextStep(step) {
       var currentSection = doc.getElementById('step-' + regState.currentStep);
       if (!currentSection) return;
 
-      var isValid = true;
+      var firstInvalid = null;
       if (regState.currentStep === 1) {
         var isChecked = doc.querySelector('input[name="regType"]:checked');
         if (!isChecked) {
-          alert('Please select a registration type (Individual or Institution).');
+          showError('Please select a registration type (Individual or Institution).');
           return;
         }
       } else {
         var inputs = currentSection.querySelectorAll('input[required], select[required]');
         inputs.forEach(function (input) {
-          if (!input.checkValidity()) {
-            isValid = false;
-            input.style.borderColor = '#ff8585';
-          } else {
-            input.style.borderColor = '';
-          }
+          var ok = input.checkValidity();
+          input.setAttribute('aria-invalid', ok ? 'false' : 'true');
+          if (!ok && !firstInvalid) firstInvalid = input;
         });
       }
 
-      if (!isValid) {
-        alert('Please fill out all required fields marked with * correctly.');
+      if (firstInvalid) {
+        showError('Please fill out all required fields marked with * correctly.');
+        firstInvalid.focus();
         return;
       }
+      showError('');
 
       if (step === 3) {
         updatePaymentSummary();
@@ -355,6 +369,7 @@
     }
 
     function prevStep(step) {
+      showError('');
       var prevSec = doc.getElementById('step-' + regState.currentStep);
       var nextSec = doc.getElementById('step-' + step);
       if (prevSec) prevSec.classList.remove('active');
@@ -367,7 +382,7 @@
     function addStudentRow() {
       var currentRows = doc.querySelectorAll('.student-row').length;
       if (currentRows >= regState.maxStudents) {
-        alert('You can only register up to ' + regState.maxStudents + ' students at a time.');
+        showError('You can only register up to ' + regState.maxStudents + ' students at a time.');
         return;
       }
 
@@ -383,7 +398,7 @@
           '</div>' +
           '<div class="input-group age-col">' +
             '<label>Age *</label>' +
-            '<input type="number" name="studentAges[]" placeholder="e.g. 12" min="5" max="100" required>' +
+            '<input type="number" name="studentAges[]" placeholder="e.g. 12" min="6" max="100" required>' +
           '</div>' +
           '<div class="input-group cat-col">' +
             '<label>Category *</label>' +
@@ -398,7 +413,7 @@
               '<option value="Navya-Rupa-Kalpana: New Choreographies">Navya-Rupa-Kalpana: New Choreographies</option>' +
             '</select>' +
           '</div>' +
-          (currentRows > 0 ? '<button type="button" class="remove-btn" onclick="removeStudentRow(\'' + rowId + '\')" title="Remove Student" aria-label="Remove Student">&#128465;&#65039;</button>' : '<div style="width: 42px;"></div>') +
+          (currentRows > 0 ? '<button type="button" class="remove-btn" data-remove="' + rowId + '" title="Remove Student" aria-label="Remove Student">&#128465;&#65039;</button>' : '<div style="width: 42px;"></div>') +
         '</div>';
 
       container.insertAdjacentHTML('beforeend', rowHTML);
@@ -410,6 +425,7 @@
       if (row) {
         row.remove();
         updateStudentCount();
+        showError('');
       }
     }
 
@@ -439,11 +455,11 @@
         var cat = (doc.getElementById('ind-category') || {}).value || '-';
 
         previewHTML =
-          '<div class="preview-row"><span class="label">Full Name</span><span class="value">' + name + '</span></div>' +
-          '<div class="preview-row"><span class="label">Age</span><span class="value">' + age + '</span></div>' +
-          '<div class="preview-row"><span class="label">Contact Number</span><span class="value">' + contact + '</span></div>' +
-          '<div class="preview-row"><span class="label">Email Address</span><span class="value">' + email + '</span></div>' +
-          '<div class="preview-row"><span class="label">Dance Category</span><span class="value">' + cat + '</span></div>';
+          '<div class="preview-row"><span class="label">Full Name</span><span class="value">' + escapeHTML(name) + '</span></div>' +
+          '<div class="preview-row"><span class="label">Age</span><span class="value">' + escapeHTML(age) + '</span></div>' +
+          '<div class="preview-row"><span class="label">Contact Number</span><span class="value">' + escapeHTML(contact) + '</span></div>' +
+          '<div class="preview-row"><span class="label">Email Address</span><span class="value">' + escapeHTML(email) + '</span></div>' +
+          '<div class="preview-row"><span class="label">Dance Category</span><span class="value">' + escapeHTML(cat) + '</span></div>';
 
         if (typeSpan) typeSpan.textContent = 'Individual';
         if (countSpan) countSpan.textContent = '1';
@@ -456,10 +472,10 @@
         var actualCount = doc.querySelectorAll('.student-row').length;
 
         previewHTML =
-          '<div class="preview-row"><span class="label">Institution</span><span class="value">' + instName + '</span></div>' +
-          '<div class="preview-row"><span class="label">Coordinator</span><span class="value">' + coord + '</span></div>' +
-          '<div class="preview-row"><span class="label">Contact Number</span><span class="value">' + contactI + '</span></div>' +
-          '<div class="preview-row"><span class="label">Email Address</span><span class="value">' + emailI + '</span></div>' +
+          '<div class="preview-row"><span class="label">Institution</span><span class="value">' + escapeHTML(instName) + '</span></div>' +
+          '<div class="preview-row"><span class="label">Coordinator</span><span class="value">' + escapeHTML(coord) + '</span></div>' +
+          '<div class="preview-row"><span class="label">Contact Number</span><span class="value">' + escapeHTML(contactI) + '</span></div>' +
+          '<div class="preview-row"><span class="label">Email Address</span><span class="value">' + escapeHTML(emailI) + '</span></div>' +
           '<div class="preview-row"><span class="label">Students Registered</span><span class="value">' + actualCount + '</span></div>';
 
         if (typeSpan) typeSpan.textContent = 'Institution (' + (instName || 'School') + ')';
@@ -475,9 +491,14 @@
       if (rzpAmount) rzpAmount.textContent = '₹' + total;
     }
 
+    // PRE-LAUNCH: a stand-in for Razorpay Checkout. Replace before going live
+    // (see CLAUDE.md, "Launch checklist").
     function openRazorpayMockup() {
       var modal = doc.getElementById('razorpay-modal');
-      if (modal) modal.classList.add('active');
+      if (!modal) return;
+      modal.classList.add('active');
+      var pay = modal.querySelector('.rzp-pay-btn');
+      if (pay) pay.focus();
     }
 
     function closeRazorpayMockup() {
@@ -485,6 +506,8 @@
       if (modal) modal.classList.remove('active');
     }
 
+    // PRE-LAUNCH: `payload` is built but never sent anywhere, and the
+    // reference number is random. Wire this to the real backend before launch.
     function submitForm() {
       closeRazorpayMockup();
       var ref = Math.floor(100000 + Math.random() * 900000);
@@ -560,20 +583,32 @@
       updateProgressBar(1);
     }
 
-    // Expose functions globally for onclick attributes
-    win.nextStep = nextStep;
-    win.prevStep = prevStep;
-    win.addStudentRow = addStudentRow;
-    win.removeStudentRow = removeStudentRow;
-    win.openRazorpayMockup = openRazorpayMockup;
-    win.closeRazorpayMockup = closeRazorpayMockup;
-    win.submitForm = submitForm;
-    win.resetRegistrationForm = resetRegistrationForm;
+    // One listener for every button in the portal and its payment window.
+    var regActions = {
+      'add-student': addStudentRow,
+      'open-payment': openRazorpayMockup,
+      'close-payment': closeRazorpayMockup,
+      'pay': submitForm,
+      'reset': resetRegistrationForm
+    };
+    doc.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-next], [data-prev], [data-remove], [data-action]');
+      if (!btn || !(regForm.contains(btn) || btn.closest('#razorpay-modal'))) return;
+      if (btn.hasAttribute('data-next')) nextStep(parseInt(btn.getAttribute('data-next'), 10));
+      else if (btn.hasAttribute('data-prev')) prevStep(parseInt(btn.getAttribute('data-prev'), 10));
+      else if (btn.hasAttribute('data-remove')) removeStudentRow(btn.getAttribute('data-remove'));
+      else if (regActions[btn.getAttribute('data-action')]) regActions[btn.getAttribute('data-action')]();
+    });
+    regForm.addEventListener('submit', function (e) { e.preventDefault(); });
+    doc.addEventListener('keydown', function (e) {
+      var modal = doc.getElementById('razorpay-modal');
+      if (e.key === 'Escape' && modal && modal.classList.contains('active')) closeRazorpayMockup();
+    });
 
     // Initialize
     addStudentRow();
     doc.querySelectorAll('input[name="regType"]').forEach(function (radio) {
-      radio.addEventListener('change', handleTypeChange);
+      radio.addEventListener('change', function () { handleTypeChange(); showError(''); });
     });
 
     // Handle payment method clicks in Razorpay modal
