@@ -338,7 +338,7 @@ main { animation: fade-in .5s ease both; }
 .festival-copy h2 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: -.012em; }
 .festival-date { font-family: var(--sans); font-weight: 600; font-size: 1.1rem; color: var(--gold-light); }
 .festival-te { font-size: 1.3rem; line-height: 1.5; color: var(--pink); }
-.posters { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2.4vw, 28px); perspective: 1200px; max-width: 560px; justify-self: center; width: 100%; }
+.posters { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: clamp(14px, 2.4vw, 28px); perspective: 1200px; max-width: 560px; justify-self: center; width: 100%; }
 .poster { display: block; border-radius: 12px; overflow: hidden; position: relative; background: var(--paper); box-shadow: 0 30px 60px -28px rgba(0, 0, 0, .85), 0 0 0 1px rgba(241, 211, 138, .5); transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .5s var(--ease), box-shadow .4s ease; }
 .posters .poster:nth-child(2) { margin-top: clamp(24px, 5vw, 56px); }
 .poster img { display: block; width: 100%; height: auto; }
@@ -601,7 +601,7 @@ a.frame:hover img { transform: scale(1.05); }
 .prose .social li { margin-top: 0; }
 
 /* poster pair on light pages */
-.poster-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2.4vw, 28px); max-width: 620px; perspective: 1200px; }
+.poster-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: clamp(14px, 2.4vw, 28px); max-width: 620px; perspective: 1200px; }
 .poster-pair .poster { box-shadow: 0 30px 50px -30px rgba(43, 22, 27, .8), 0 0 0 1px var(--line); }
 
 /* ---------- small helpers ---------- */

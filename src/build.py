@@ -520,7 +520,7 @@ def footer():
         '<div class="wrap footer-base">'
         f'<span>© 2026 {SITE["name"]}</span>'
         f'<span><a href="{url("/privacy-policy/")}">Privacy Policy</a><a href="{url("/terms-and-conditions/")}">Terms and Conditions</a></span>'
-        '<span>Designed and maintained by Vikram Pagadala, Premam Productions</span>'
+        '<span>Designed and maintained by <a href="https://www.linkedin.com/in/vikrampagadala/" rel="noopener">Vikram Pagadala</a></span>'
         '</div></footer>')
 
 
