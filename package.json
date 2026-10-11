@@ -1,0 +1,10 @@
+{
+  "name": "kuchipudi-website",
+  "version": "1.0.0",
+  "description": "Kuchipudi Heritage Arts Society static website & registration portal",
+  "scripts": {
+    "start": "python3 -m http.server -d public 8000",
+    "dev": "python3 -m http.server -d public 8000",
+    "build": "cd src && python3 build.py"
+  }
+}

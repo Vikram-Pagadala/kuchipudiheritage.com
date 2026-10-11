@@ -1,0 +1,250 @@
+<div class="contact-grid">
+  <div class="stack">
+    <div class="prose">
+      <h2 id="who">Who can apply</h2>
+      <p>The event is open to all Kuchipudi artists above six years of age. Applications and registrations are submitted by individual performers, gurus, or institutions on behalf of their students.</p>
+
+      <h2 id="dates">Dates to remember</h2>
+      <dl class="facts">
+        <div><dt>Applications close</dt><dd>30 November 2026</dd></div>
+        <div><dt>Reporting time</dt><dd>10:00 AM on 27 December 2026</dd></div>
+      </dl>
+
+      <h2 id="terms">What participants need to know</h2>
+      <ul>
+        <li><strong>What to prepare.</strong> Every artist memorises, recites and performs abhinaya for the Natya Shastra slokas: Natya Vedam, Asamyuta Hasta, Samyuta Hasta and Nritta Hasta. These open the event.</li>
+        <li><strong>Learning material.</strong> Reference videos are shared once registration and payment of the fee are complete.</li>
+        <li><strong>Dress.</strong> Traditional Kuchipudi costume. Participants arrange their own make-up.</li>
+        <li><strong>Recognition.</strong> Each participant in this Kuchipudi world record event 2026 receives an official certificate and a memento. Natya gurus are felicitated.</li>
+        <li><strong>Food.</strong> Meals are provided on the day of the event for each performing artist and one accompanying person.</li>
+        <li><strong>Fee.</strong> The application fee and how to pay it are given in the form. Read the refund terms there before you pay.</li>
+      </ul>
+      <p>The form carries the complete terms and conditions. Where this page and the form differ, the form applies.</p>
+
+      <h2 id="festival">Part of the Dance Confluence</h2>
+      <p>Geeta Saaram Natya Vedam takes place on 27 December 2026, the final day of <a href="[[url:/events/]]">the International Kuchipudi Dance Confluence</a>.</p>
+      [[block:poster_pair]]
+
+      <h2 id="help">Need help with your application?</h2>
+      <p>Call <a href="tel:[[site:phone_e164]]">[[site:phone_display]]</a> or <a href="tel:[[site:phone2_e164]]">[[site:phone2_display]]</a>, or <a href="[[url:/contact-us/]]">send us an inquiry</a>.</p>
+    </div>
+  </div>
+
+  <div class="stack">
+    <h2 id="apply">Online Registration Portal</h2>
+    <p>Register online for Geeta Saaram Natya Vedam 2026 as an individual artist or as an institution / dance school with multiple students.</p>
+
+    <div class="reg-portal-card" id="reg-portal">
+      <!-- Registration Hero Banner -->
+      <div class="reg-hero-banner">
+        <div class="reg-banner-content">
+          <span class="reg-banner-icon" aria-hidden="true">&#129684;</span>
+          <h3 class="reg-banner-title">Kuchipudi Dance Performance</h3>
+          <div class="reg-banner-divider"></div>
+          <p class="reg-banner-sub">Official Registration Portal</p>
+        </div>
+        <div class="reg-banner-overlay"></div>
+      </div>
+
+      <!-- Progress indicator -->
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <div class="steps-indicator">
+        <div class="step-dot active" data-step="1">1</div>
+        <div class="step-dot" data-step="2">2</div>
+        <div class="step-dot" data-step="3">3</div>
+      </div>
+
+      <form id="registrationForm" onsubmit="return false;">
+        <!-- STEP 1: Registration Type -->
+        <section class="form-step active" id="step-1">
+          <h3 class="step-heading">Registration Type</h3>
+          <p class="step-desc">Please select how you would like to register.</p>
+
+          <div class="radio-group cards">
+            <label class="radio-card">
+              <input type="radio" name="regType" value="individual" required>
+              <div class="card-content">
+                <span class="card-icon" aria-hidden="true">&#128100;</span>
+                <h4>Individual</h4>
+                <p>Register as a single performer (&#8377;500)</p>
+              </div>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="regType" value="institution">
+              <div class="card-content">
+                <span class="card-icon" aria-hidden="true">&#127963;&#65039;</span>
+                <h4>Institution / School</h4>
+                <p>Register up to 50 students at once (&#8377;400 / student)</p>
+              </div>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary next-btn" onclick="nextStep(2)">Continue</button>
+          </div>
+        </section>
+
+        <!-- STEP 2: Details -->
+        <section class="form-step" id="step-2">
+          <!-- INDIVIDUAL FORM -->
+          <div id="individual-fields" style="display: none;">
+            <h3 class="step-heading">Participant Details</h3>
+            <p class="step-desc">Enter the details of the individual performer.</p>
+
+            <div class="input-group">
+              <label for="ind-name">Full Name *</label>
+              <input type="text" id="ind-name" name="indName" placeholder="e.g. Aditi Sharma">
+            </div>
+            <div class="input-row">
+              <div class="input-group">
+                <label for="ind-age">Age *</label>
+                <input type="number" id="ind-age" name="indAge" placeholder="e.g. 18" min="5" max="100">
+              </div>
+              <div class="input-group">
+                <label for="ind-contact">Contact Number *</label>
+                <input type="tel" id="ind-contact" name="indContact" placeholder="e.g. 9876543210" pattern="[0-9]{10}" maxlength="10" title="Please enter a valid 10-digit mobile number">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="ind-email">Email Address *</label>
+              <input type="email" id="ind-email" name="indEmail" placeholder="e.g. user@gmail.com">
+            </div>
+            <div class="input-group">
+              <label for="ind-category">Dance Category *</label>
+              <select id="ind-category" name="indCategory">
+                <option value="" disabled selected>Select Category</option>
+                <option value="Vyastha-Nritya Kele: Solos">Vyastha-Nritya Kele: Solos</option>
+                <option value="Yugala-Nritya Kele: Duets">Yugala-Nritya Kele: Duets</option>
+                <option value="Brindha-Nritya Kele: Group Performances">Brindha-Nritya Kele: Group Performances</option>
+                <option value="Kalaapa-Kele: Kalaapa (50 min slots)">Kalaapa-Kele: Kalaapa (50 min slots)</option>
+                <option value="Yaksha-Gana Kele: Yakshaganas">Yaksha-Gana Kele: Yakshaganas</option>
+                <option value="Nritya-Rupaka: Dance Ballets">Nritya-Rupaka: Dance Ballets</option>
+                <option value="Navya-Rupa-Kalpana: New Choreographies">Navya-Rupa-Kalpana: New Choreographies</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- INSTITUTION FORM -->
+          <div id="institution-fields" style="display: none;">
+            <h3 class="step-heading">Institution Details</h3>
+            <p class="step-desc">Enter the institution details and add participating students.</p>
+
+            <div class="input-group">
+              <label for="inst-name">Institution / School Name *</label>
+              <input type="text" id="inst-name" name="instName" placeholder="e.g. Natya Tarangini">
+            </div>
+            <div class="input-row">
+              <div class="input-group">
+                <label for="inst-coordinator">Coordinator Name *</label>
+                <input type="text" id="inst-coordinator" name="instCoordinator" placeholder="e.g. Sri Pasumarthy">
+              </div>
+              <div class="input-group">
+                <label for="inst-contact">Contact Number *</label>
+                <input type="tel" id="inst-contact" name="instContact" placeholder="e.g. 9876543210" pattern="[0-9]{10}" maxlength="10" title="Please enter a valid 10-digit mobile number">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="inst-email">Institution Email Address *</label>
+              <input type="email" id="inst-email" name="instEmail" placeholder="e.g. school@gmail.com">
+            </div>
+
+            <div class="student-list-container">
+              <div class="student-list-header">
+                <h4>Student List</h4>
+                <span class="student-count"><span id="current-count">1</span>/50 Added</span>
+              </div>
+              <div id="students-container">
+                <!-- Student rows dynamically generated -->
+              </div>
+              <button type="button" class="btn btn-secondary add-student-btn" onclick="addStudentRow()">
+                <span>+</span> Add Another Student
+              </button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline prev-btn" onclick="prevStep(1)">Back</button>
+            <button type="button" class="btn btn-primary next-btn" onclick="nextStep(3)">Proceed to Payment</button>
+          </div>
+        </section>
+
+        <!-- STEP 3: Payment -->
+        <section class="form-step" id="step-3">
+          <h3 class="step-heading">Review &amp; Payment</h3>
+          <p class="step-desc">Review your registration details and complete the fee payment.</p>
+
+          <div class="payment-summary">
+            <h4 class="summary-title">Registration Preview</h4>
+            <div id="preview-container" class="preview-box"></div>
+            <hr class="summary-divider">
+            <h4 class="summary-title">Payment Summary</h4>
+            <div class="summary-row">
+              <span>Registration Type:</span>
+              <span id="summary-type" class="highlight">Individual</span>
+            </div>
+            <div class="summary-row">
+              <span>Number of Participants:</span>
+              <span id="summary-count" class="highlight">1</span>
+            </div>
+            <div class="summary-row total">
+              <span>Total Amount to Pay:</span>
+              <span id="summary-total" class="highlight">&#8377;500</span>
+            </div>
+          </div>
+
+          <div class="form-actions payment-actions">
+            <button type="button" class="btn btn-razorpay" onclick="openRazorpayMockup()">
+              Pay <span id="btn-pay-amount">&#8377;500</span> via Razorpay
+            </button>
+            <button type="button" class="btn btn-outline prev-btn" onclick="prevStep(2)">Back</button>
+          </div>
+        </section>
+
+        <!-- STEP 4: Success -->
+        <section class="form-step success-step" id="step-4">
+          <div class="success-icon" aria-hidden="true">&#10003;</div>
+          <h3 class="step-heading">Registration Successful!</h3>
+          <p>Thank you for registering for Geeta Saaram Natya Vedam 2026. Your details and payment simulation have been recorded.</p>
+          <p class="ref-num">Reference Number: <strong>KDP-<span id="random-ref"></span></strong></p>
+          <button type="button" class="btn btn-primary" onclick="resetRegistrationForm()">Register Another</button>
+        </section>
+      </form>
+    </div>
+
+    <!-- Razorpay Dummy Modal -->
+    <div id="razorpay-modal" class="rzp-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="rzp-title">
+      <div class="rzp-modal">
+        <div class="rzp-header">
+          <img src="https://razorpay.com/assets/razorpay-logo-white.svg" alt="Razorpay" height="24">
+          <button class="rzp-close" type="button" onclick="closeRazorpayMockup()" aria-label="Close">&times;</button>
+        </div>
+        <div class="rzp-body">
+          <div class="rzp-merchant" id="rzp-title">Kuchipudi Heritage Arts Society</div>
+          <div class="rzp-amount" id="rzp-display-amount">&#8377;500</div>
+          <div class="rzp-methods">
+            <div class="rzp-method active" tabindex="0">
+              <span>UPI / QR</span>
+              <span>&rsaquo;</span>
+            </div>
+            <div class="rzp-method" tabindex="0">
+              <span>Cards</span>
+              <span>&rsaquo;</span>
+            </div>
+            <div class="rzp-method" tabindex="0">
+              <span>Netbanking</span>
+              <span>&rsaquo;</span>
+            </div>
+          </div>
+          <button type="button" class="rzp-pay-btn" onclick="submitForm()">
+            Simulate Successful Payment
+          </button>
+        </div>
+        <div class="rzp-footer">
+          Secured by Razorpay Mock Sandbox
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

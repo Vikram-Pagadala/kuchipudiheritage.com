@@ -1,0 +1,79 @@
+# kuchipudiheritage.com  (Apache / cPanel hosting)
+ErrorDocument 404 /404.html
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# one address only: https, without www
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^ https://kuchipudiheritage.com%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} ^www\.kuchipudiheritage\.com$ [NC]
+RewriteRule ^ https://kuchipudiheritage.com%{REQUEST_URI} [L,R=301]
+# /page/index.html -> /page/
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
+RewriteRule ^ /%1 [L,R=301]
+</IfModule>
+
+# old WordPress addresses
+RedirectMatch 301 ^/our\-lagendary/?$ /kuchipudi-gurus/
+RedirectMatch 301 ^/our\-legendary/?$ /kuchipudi-gurus/
+RedirectMatch 301 ^/contact/?$ /contact-us/
+RedirectMatch 301 ^/team/?$ /the-team/
+RedirectMatch 301 ^/applications/?$ /application-for-institutions/
+RedirectMatch 301 ^/register/?$ /application-for-institutions/
+RedirectMatch 301 ^/registration/?$ /application-for-institutions/
+RedirectMatch 301 ^/feed/?$ /
+# old WordPress image addresses
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/logo\.png$ /assets/img/logo-512.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/portrait_of_siddhendra_yogi\.jpeg$ /assets/img/siddhendra-yogi-painting.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/04/flag\-png\.png$ /assets/img/kuchipudi-flag-patakam.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/01/1\.jpg$ /assets/img/kuchipudi-dance-confluence-2026-poster.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/01/2\.jpg$ /assets/img/kuchipudi-dance-confluence-2026-poster-telugu.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/chinta\-venkataramayya\-1\.png$ /assets/img/gurus/chinta-venkataramayya.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/vempati\-venkatanarayana\.png$ /assets/img/gurus/vempati-venkatanarayana.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/vedantam\-lakshminarayana\-sastry\.png$ /assets/img/gurus/vedantam-lakshminarayana-sastry.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/tadepalli\-perayya\.png$ /assets/img/gurus/tadepalli-perayya.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/04/10\.chinta\-krishna\-murthy\-1\.png$ /assets/img/gurus/chinta-krishna-murthy.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/vedantam\-raghavayya\.png$ /assets/img/gurus/vedantam-raghavayya.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/04/vedantam\-parvatisam\.png$ /assets/img/gurus/vedantam-parvateesam.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/vempati\-peda\-satyanarayana\.png$ /assets/img/gurus/vempati-peda-satyam.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/pasumarti\-krishna\-murthy\.png$ /assets/img/gurus/pasumarthi-krishna-murthy.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/04/11\.vempati\-china\-satyam\.png$ /assets/img/gurus/vempati-chinna-satyam.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/04/vedantam\-satyanarayana\-sarma\.png$ /assets/img/gurus/vedantam-satyanarayana-sarma.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/mahankali\-satyanarayana\.png$ /assets/img/gurus/mahankali-satyanarayana.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/k\.\-uma\-rama\-rao\.png$ /assets/img/gurus/uma-rama-rao.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/04/13\.vedantam\-rattaiah\-sarma\.png$ /assets/img/gurus/vedantam-rattaiah-sarma.webp
+RedirectMatch 301 ^/wp\-content/uploads/2024/03/sobha\-naidu\.png$ /assets/img/gurus/sobha-naidu.webp
+RedirectMatch 301 ^/wp\-content/uploads/2026/03/sri\-pasumarthy\-ramalinga\-sastry\.png$ /assets/img/team/pasumarthy-ramalinga-sastry.webp
+RedirectMatch 301 ^/wp\-content/uploads/2026/03/vedantam\-venkata\-rama\-raghava\.png$ /assets/img/team/vedantam-venkata-rama-raghava.webp
+RedirectMatch 301 ^/wp\-content/uploads/2026/03/dr\.\-kiran\-vedantam\.png$ /assets/img/team/kiran-vedantam.webp
+RedirectMatch 301 ^/wp\-content/uploads/2026/03/dr\.\-vedantam\-venkata\-naga\-chalapathi\-rao\-1\.png$ /assets/img/team/vedantam-venkata-naga-chalapathi-rao.webp
+RedirectMatch 301 ^/wp-(admin|login\.php).*$ /
+
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType text/html "access plus 10 minutes"
+ExpiresByType text/css "access plus 1 year"
+ExpiresByType application/javascript "access plus 1 year"
+ExpiresByType text/javascript "access plus 1 year"
+ExpiresByType font/woff2 "access plus 1 year"
+ExpiresByType image/png "access plus 1 month"
+ExpiresByType image/jpeg "access plus 1 month"
+ExpiresByType image/webp "access plus 1 month"
+</IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript application/json application/xml text/plain
+</IfModule>
+
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
+
+AddType font/woff2 .woff2
+AddType image/webp .webp
+AddType application/manifest+json .webmanifest

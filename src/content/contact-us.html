@@ -1,0 +1,50 @@
+<div class="contact-grid">
+  <div class="stack">
+    <h2 id="details">Address, phone and email</h2>
+    <dl class="contact-list">
+      <div>
+        <dt>Address</dt>
+        <dd><address>[[site:name]]<br>[[site:street]],<br>[[site:locality]],<br>[[site:region]] [[site:postcode]], India</address></dd>
+      </div>
+      <div>
+        <dt>Phone</dt>
+        <dd><a href="tel:[[site:phone_e164]]">[[site:phone_display]]</a></dd>
+      </div>
+      <div>
+        <dt>Email</dt>
+        <dd><a href="mailto:[[site:email]]">[[site:email]]</a></dd>
+      </div>
+      <div>
+        <dt>Follow</dt>
+        <dd>
+          <ul class="social">
+            <li><a href="[[site:youtube]]" rel="noopener">YouTube</a></li>
+            <li><a href="[[site:instagram]]" rel="noopener">Instagram</a></li>
+            <li><a href="[[site:facebook]]" rel="noopener">Facebook</a></li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
+
+    <h2 id="map">Find us in Kuchipudi village</h2>
+    [[if:prod]]<div class="embed embed-map">
+      <iframe src="[[site:map_embed]]" title="Map of Kuchipudi village, Krishna district, Andhra Pradesh" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    </div>[[/if]][[if:preview]]<div class="embed"><div class="embed-fallback"><p>The Google Map of Kuchipudi village appears here on the live site.</p></div></div>[[/if]]
+    <p><a class="link" href="[[site:map_link]]" rel="noopener">Open Kuchipudi village in Google Maps</a></p>
+    <p>Kuchipudi village is in Movva mandal of Krishna district, Andhra Pradesh. The nearest city is Vijayawada.</p>
+  </div>
+
+  <div class="stack">
+    <h2 id="inquiry">Send us your inquiry</h2>
+    <p>Fill in the form and we will get back to you soon. You can write to us about a general inquiry, a collaboration or media request, feedback or a suggestion, or information on an event or festival.</p>
+    [[if:prod]]<div class="embed embed-form">
+      <iframe src="[[site:form_contact]]?embedded=true" title="Inquiry form: Kuchipudi Heritage Arts Society" loading="lazy">Loading the inquiry form…</iframe>
+    </div>[[/if]][[if:preview]]<div class="embed"><div class="embed-fallback"><p>The inquiry form appears here on the live site.</p></div></div>[[/if]]
+    <p><a class="link" href="[[site:form_contact]]" rel="noopener">Open the inquiry form in a new tab</a></p>
+    <div class="callout">
+      <h3>Applying for Geeta Saaram Natya Vedam 2026?</h3>
+      <p>Gurus and institutions should use the application form, not this one. Applications close on 30 November 2026.</p>
+      <p><a class="link" href="[[url:/application-for-institutions/]]">Go to the application for institutions</a></p>
+    </div>
+  </div>
+</div>
