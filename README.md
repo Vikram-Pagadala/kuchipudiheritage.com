@@ -17,8 +17,7 @@ A modern, fast, and accessible static website representing the timeless traditio
 - **Legendary Gurus (`public/kuchipudi-gurus/index.html`)**: Biographies and portraits honoring 15 master gurus of the Kuchipudi tradition.
 - **The Kuchipudi Flag (`public/kuchipudi-flag/index.html`)**: Interactive component explaining the sacred symbols and cultural significance of the Kuchipudi *Patakam*.
 - **Events & Confluence (`public/events/index.html`)**: Details, schedules, and video archives for the Kuchipudi Dance Confluence and upcoming programs.
-- **Registration Portal (`public/register/index.html`)**: Multi-step registration flow for individual performers and participating groups.
-- **Institution Application (`public/application-for-institutions/index.html`)**: Official application gateway for dance academies and gurus for Geeta Saaram Natya Vedam 2026.
+- **Institution & Performer Application (`public/application-for-institutions/index.html`)**: Multi-step registration and application gateway for individual artists, dance academies, and gurus for Geeta Saaram Natya Vedam 2026.
 - **The Team (`public/the-team/index.html`)**: Leadership, executive committee, and patrons of the Society.
 - **Contact (`public/contact-us/index.html`)**: Village headquarters, office location, telephone, and official correspondence channels.
 
@@ -52,7 +51,6 @@ kuchipudiheritage.com/
 │   ├── kuchipudi-gurus/                   # 15 master gurus tribute
 │   ├── kuchipudi-history/                 # Detailed historical timeline
 │   ├── privacy-policy/                    # Privacy policy
-│   ├── register/                          # Online performer registration portal
 │   ├── terms-and-conditions/              # Terms and conditions
 │   ├── the-team/                          # Society leadership & organizing team
 │   ├── .htaccess                          # Apache / cPanel redirect and caching rules
@@ -63,8 +61,7 @@ kuchipudiheritage.com/
 │   ├── robots.txt                         # Search engine crawler directives
 │   ├── site.webmanifest                   # PWA manifest
 │   └── sitemap.xml                        # Search engine XML sitemap
-├── src/                                   # Source files & build generator (optional)
-│   ├── assets/                            # Source styles, scripts, fonts & images
+├── src/                                   # Source files & build generator
 │   ├── content/                           # Page content templates
 │   ├── build.py                           # Python build and validation script
 │   └── data.py                            # Centralized site data and metadata

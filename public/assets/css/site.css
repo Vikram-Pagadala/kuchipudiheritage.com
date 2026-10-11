@@ -243,7 +243,7 @@ main { animation: fade-in .5s ease both; }
 .section { padding-block: var(--space-section); position: relative; }
 .section-tight { padding-block: clamp(40px, 6vw, 72px); }
 .section-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: clamp(28px, 4vw, 52px); max-width: 46rem; }
-.section-head h2, .split-copy h2, .reach h2 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: -.012em; }
+.section-head h2, .reach h2 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: -.012em; }
 .section-head p { color: var(--ink-soft); }
 .rule { width: 72px; height: 3px; background: linear-gradient(90deg, var(--gold), var(--pink)); border-radius: 2px; }
 
@@ -332,13 +332,6 @@ main { animation: fade-in .5s ease both; }
 .flag-copy { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
 .flag-copy h2 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: -.012em; }
 @media (max-width: 860px) { .flagshow { grid-template-columns: minmax(0, 1fr); } .flag-figure { max-width: 240px; } }
-
-/* two-up rows */
-.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
-.split-copy { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
-.split-copy h3 { font-size: 1.45rem; line-height: 1.25; }
-@media (max-width: 860px) { .split { grid-template-columns: minmax(0, 1fr); } }
-
 /* the festival */
 .festival { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
 .festival-copy { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
@@ -527,7 +520,6 @@ a.frame:hover img { transform: scale(1.05); }
 .frame-1x1 { aspect-ratio: 1 / 1; }
 .frame-4x5 { aspect-ratio: 4 / 5; }
 .frame-4x3 { aspect-ratio: 800 / 621; }
-.frame-2x3 { aspect-ratio: 2 / 3; }
 .frame-wide { aspect-ratio: 1024 / 696; }
 .zoom { cursor: zoom-in; }
 .gilt { box-shadow: 0 0 0 3px var(--gold), 0 0 0 12px rgba(200, 150, 46, .13), 0 30px 50px -30px rgba(43, 22, 27, .7); }
@@ -600,7 +592,6 @@ a.frame:hover img { transform: scale(1.05); }
 .embed iframe { display: block; width: 100%; border: 0; }
 .embed-map iframe { height: 360px; }
 .embed-form iframe { height: 980px; }
-.embed-form-tall iframe { height: 1500px; }
 .embed-fallback { padding: 28px 24px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
 .stack { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
 .stack > h2 { font-size: clamp(1.7rem, 2.9vw, 2.25rem); line-height: 1.15; }
@@ -678,7 +669,7 @@ a.frame:hover img { transform: scale(1.05); }
   min-height: 140px;
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, rgba(59, 19, 38, 0.95), rgba(36, 16, 26, 0.95)), url('/assets/img/hero.png') center/cover no-repeat;
+  background: linear-gradient(135deg, rgba(59, 19, 38, 0.92), rgba(36, 16, 26, 0.95)), url('/assets/img/kuchipudi-dancers-temple-art-640.webp') center/cover no-repeat;
   border: 1px solid rgba(200, 150, 46, 0.35);
   margin-bottom: 24px;
   padding: 20px;

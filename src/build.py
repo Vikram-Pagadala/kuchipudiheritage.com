@@ -17,6 +17,7 @@ from pathlib import Path
 import data as D
 
 ROOT = Path(__file__).resolve().parent
+PUBLIC = ROOT.parent / "public"
 PREVIEW = "--preview" in sys.argv
 OUT = ROOT.parent / ("preview" if PREVIEW else "public")
 SITE = D.SITE
@@ -587,9 +588,9 @@ FONT_FACES = """
 GOOGLE_FONTS = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
                 'family=Anek+Telugu:wght@400..700&amp;family=Tiro+Telugu:ital@0;1&amp;display=swap">')
 
-CSS = (ROOT / "assets/css/site.css").read_text(encoding="utf-8")
-JS = (ROOT / "assets/js/site.js").read_text(encoding="utf-8")
-VERSION = hashlib.sha1((FONT_FACES + CSS + JS).encode()).hexdigest()[:8]
+CSS = (PUBLIC / "assets/css/site.css").read_text(encoding="utf-8")
+JS = (PUBLIC / "assets/js/site.js").read_text(encoding="utf-8")
+VERSION = hashlib.sha1((CSS + JS).encode()).hexdigest()[:8]
 
 # Runs before the page paints. Marks that script is available and, on the
 # first visit of a session to the home page, asks for the opening curtain.
@@ -830,17 +831,16 @@ def main():
         write(out_name(page), doc)
     write("404.html", document(NOT_FOUND, not_found_body(), noindex=True))
 
-    shutil.copytree(ROOT / "assets/img", OUT / "assets/img", dirs_exist_ok=True)
     if PREVIEW:
+        shutil.copytree(PUBLIC / "assets", OUT / "assets", dirs_exist_ok=True)
+        for name in ("favicon.ico", "favicon-96.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png"):
+            shutil.copy(PUBLIC / name, OUT / name)
         shutil.rmtree(OUT / "assets/img/og", ignore_errors=True)
     else:
-        write("assets/css/site.css", FONT_FACES + "\n" + CSS)
-        write("assets/js/site.js", JS)
-        shutil.copytree(ROOT / "assets/fonts", OUT / "assets/fonts", dirs_exist_ok=True)
-        for name in ("favicon.ico", "favicon-96.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png"):
-            shutil.copy(ROOT / "assets/icons" / name, OUT / name)
-        for stale in ("favicon.svg",):
+        for stale in ("favicon.svg", "assets/img/hero.png", "hero.png"):
             (OUT / stale).unlink(missing_ok=True)
+        if (OUT / "register").exists():
+            shutil.rmtree(OUT / "register", ignore_errors=True)
         write("site.webmanifest", MANIFEST)
         write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {D.DOMAIN}/sitemap.xml\n")
         write("sitemap.xml", sitemap())
