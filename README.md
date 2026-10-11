@@ -1,132 +1,111 @@
-# kuchipudiheritage.com — rebuilt as a static site
+# Kuchipudi Heritage Arts Society
 
-A hand-coded replacement for the WordPress site. Plain HTML, one CSS file, one
-small JavaScript file, and the Society's own pictures. No WordPress, no
-plugins, no database, and nothing to install on the host.
+Official website and digital portal for **Kuchipudi Heritage Arts Society** — preserving, presenting, and celebrating the classical Indian dance form originating from the historic Kuchipudi village, Andhra Pradesh, India.
 
-## What is in this folder
+🌐 **Website:** [kuchipudiheritage.com](https://kuchipudiheritage.com/)
 
-| Path | What it is |
-| --- | --- |
-| `public/` | **The website.** Upload the *contents* of this folder to your host. |
-| `SEO-PLAN.md` | The keyword map, what was done on each page, the launch checklist and what to write next. |
-| `src/` | The source the site is generated from. Optional. Use it when you want to change the menu, footer or content in one place. |
+---
 
-## Launch in three steps
+## 🎭 Overview
 
-1. **Upload `public/`** to your host.
-   - *Netlify or Cloudflare Pages (free):* drag the `public` folder in. They
-     read `_redirects` and `_headers` automatically.
-   - *cPanel / Apache hosting:* upload the contents of `public` into
-     `public_html`. Make sure the hidden file `.htaccess` is uploaded too.
-     It carries the redirects, caching and the HTTPS rule.
+A modern, fast, and accessible static website representing the timeless tradition of Kuchipudi. The platform provides comprehensive educational resources on Kuchipudi history, repertoire, the 15 legendary gurus, the Kuchipudi flag symbolism, and an online registration portal for institutions and performers for **Geeta Saaram Natya Vedam 2026**.
 
-2. **Point the domain** `kuchipudiheritage.com` at the new host and turn on
-   HTTPS there.
+### Key Pages & Features
+- **Home (`public/index.html`)**: Society mission, traditional curtain (*tera*) entrance animation, festival countdown to 25 December 2026, and guru highlights.
+- **Kuchipudi Dance (`public/kuchipudi-dance/index.html`)**: Complete guide to Kuchipudi dance origins, Natyashastra foundation, expressions (*Abhinaya*), and movements.
+- **History (`public/kuchipudi-history/index.html`)**: Chronological journey tracing Siddhendra Yogi, the Bhagavata Melas, court patronage, and the 20th-century renaissance.
+- **Legendary Gurus (`public/kuchipudi-gurus/index.html`)**: Biographies and portraits honoring 15 master gurus of the Kuchipudi tradition.
+- **The Kuchipudi Flag (`public/kuchipudi-flag/index.html`)**: Interactive component explaining the sacred symbols and cultural significance of the Kuchipudi *Patakam*.
+- **Events & Confluence (`public/events/index.html`)**: Details, schedules, and video archives for the Kuchipudi Dance Confluence and upcoming programs.
+- **Registration Portal (`public/register/index.html`)**: Multi-step registration flow for individual performers and participating groups.
+- **Institution Application (`public/application-for-institutions/index.html`)**: Official application gateway for dance academies and gurus for Geeta Saaram Natya Vedam 2026.
+- **The Team (`public/the-team/index.html`)**: Leadership, executive committee, and patrons of the Society.
+- **Contact (`public/contact-us/index.html`)**: Village headquarters, office location, telephone, and official correspondence channels.
 
-3. **Tell Google.** Follow the launch checklist in `SEO-PLAN.md`: verify the
-   site in Google Search Console, submit `https://kuchipudiheritage.com/sitemap.xml`,
-   and check that the old addresses redirect.
+---
 
-To look at the site on your own computer first:
+## 🛠️ Tech Stack
 
-```bash
-cd public && python3 -m http.server 8000
+- **HTML5 & Vanilla CSS3**: Semantic HTML, custom CSS variables, responsive typography, and accessible animation controls.
+- **Vanilla JavaScript**: Interactive curtain reveal, smooth page transitions, dynamic countdown timer, modal viewers, and registration workflows.
+- **Self-Hosted Typography**: Zero external Google Font dependencies; self-hosts **Tiro Telugu** and **Anek Telugu** under SIL Open Font License.
+- **Python Static Site Generator**: Lightweight build engine (`src/build.py` & `src/data.py`) validating HTML structure, heading hierarchy, links, and SEO metadata.
+- **SEO & Performance**: JSON-LD Schema markup, Open Graph tags, XML sitemap, `robots.txt`, and optimized WebP photography.
+
+---
+
+## 📁 Project Structure
+
+```text
+kuchipudiheritage.com/
+├── public/                                # Production static website (deployable root)
+│   ├── application-for-institutions/      # Institution application page
+│   ├── assets/
+│   │   ├── css/                           # site.css design system & animations
+│   │   ├── fonts/                         # Self-hosted Tiro & Anek Telugu fonts
+│   │   ├── img/                           # Optimized WebP images (gurus, team, posters)
+│   │   └── js/                            # site.js interactions & motion logic
+│   ├── contact-us/                        # Contact information & directions
+│   ├── events/                            # Dance Confluence & festival schedules
+│   ├── kuchipudi-dance/                   # History & repertoire overview
+│   ├── kuchipudi-flag/                    # Kuchipudi Patakam symbolism
+│   ├── kuchipudi-gurus/                   # 15 master gurus tribute
+│   ├── kuchipudi-history/                 # Detailed historical timeline
+│   ├── privacy-policy/                    # Privacy policy
+│   ├── register/                          # Online performer registration portal
+│   ├── terms-and-conditions/              # Terms and conditions
+│   ├── the-team/                          # Society leadership & organizing team
+│   ├── .htaccess                          # Apache / cPanel redirect and caching rules
+│   ├── _headers                           # Security & cache headers for Netlify/Cloudflare
+│   ├── _redirects                         # Canonical 301 redirects
+│   ├── index.html                         # Home page
+│   ├── 404.html                           # Custom 404 error page
+│   ├── robots.txt                         # Search engine crawler directives
+│   ├── site.webmanifest                   # PWA manifest
+│   └── sitemap.xml                        # Search engine XML sitemap
+├── src/                                   # Source files & build generator (optional)
+│   ├── assets/                            # Source styles, scripts, fonts & images
+│   ├── content/                           # Page content templates
+│   ├── build.py                           # Python build and validation script
+│   └── data.py                            # Centralized site data and metadata
+├── .gitignore                             # Git ignore rules
+├── LICENSE                                # Apache 2.0 License
+├── package.json                           # Development scripts
+└── README.md                              # Project documentation
 ```
 
-then open http://localhost:8000. (Opening the files by double-clicking will
-not work, because the pages use addresses that start at the site root.)
+---
 
-## Pages
+## 🚀 Quick Start & Development
 
-| Address | Page |
-| --- | --- |
-| `/` | Home |
-| `/kuchipudi-dance/` | What Kuchipudi dance is (new) |
-| `/kuchipudi-history/` | The history of Kuchipudi (new) |
-| `/kuchipudi-gurus/` | The 15 gurus. Replaces `/our-lagendary/` |
-| `/kuchipudi-flag/` | The Kuchipudi flag, with its parts explained (new) |
-| `/events/` | The Dance Confluence, upcoming events and recordings (new) |
-| `/the-team/` | The team. Same address as before |
-| `/contact-us/` | Contact. Same address as before |
-| `/application-for-institutions/` | Geeta Saaram Natya Vedam 2026 application. Same address as before |
-| `/privacy-policy/`, `/terms-and-conditions/` | Legal. Same addresses as before |
-
-Old addresses that changed (`/our-lagendary/`, `/contact/`) and the old
-WordPress picture addresses are redirected with a permanent (301) redirect.
-
-## The pictures
-
-Every picture on the site comes from the old kuchipudiheritage.com. Nothing
-was drawn or generated. They are in `public/assets/img/`:
-
-| Picture | File |
-| --- | --- |
-| Logo (the statue in its circle) | `logo-512.webp`, `logo-160.webp`, plus the browser icons |
-| Painting of Siddhendra Yogi | `siddhendra-yogi-painting.webp` |
-| The Kuchipudi flag, cut out from its white background | `kuchipudi-flag-patakam.webp` |
-| Festival posters, English and Telugu | `kuchipudi-dance-confluence-2026-poster*.webp` |
-| The dancers and temple, cropped from the English poster | `kuchipudi-dancers-temple-art.webp` |
-| 15 guru portraits | `gurus/` |
-| 4 team portraits | `team/` |
-| Covers of your 4 YouTube videos | `videos/` |
-
-Each has a full-size file and a lighter one for phones. They were captured
-from the live site at up to 800 to 1200 pixels wide, which is what the layout
-needs. If you have the original files at higher resolution and want any of
-them sharper, send them and I will swap them in.
-
-To replace a picture, save the new one over the old file with the same name
-and size.
-
-## What moves
-
-- **The curtain.** On a visitor's first visit to the home page, a maroon
-  curtain parts to reveal the stage, the way a Kuchipudi character enters from
-  behind the tera. It plays once per browser session and lasts about a second.
-- **Page changes.** Moving between pages, the new page opens from the centre
-  like a curtain (Chrome, Edge and Safari; other browsers get a soft fade).
-- **Home page.** The title rises in word by word, gold dust drifts across the
-  stage, the festival painting slowly zooms, the flag sways on its pole, the
-  numbers count up, the gurus pass in two rows, the history line fills as you
-  scroll, the posters tilt towards the pointer, and the countdown ticks.
-- **Every page.** Sections rise into place as you reach them, pictures open
-  larger when pressed, a gold line at the top shows how far you have read, and
-  the menu bar tucks away as you scroll down and returns as you scroll up.
-- **The flag.** Point at a part of the flag to read what it means.
-
-Visitors who have asked their device to reduce motion get the same pages with
-everything still. The site also reads fully with JavaScript switched off.
-
-## Changing the site later
-
-**Small text change:** open the page's `index.html` inside `public/` and edit
-the words.
-
-**Anything that repeats** (menu, footer, phone number, a guru's details): edit
-the source and rebuild.
+### Local Preview
+Run the local static server:
 
 ```bash
-cd src
-python3 build.py        # writes ../public
+npm start
+# or: python3 -m http.server -d public 8000
+```
+Then visit [http://localhost:8000](http://localhost:8000) in your browser.
+
+### Rebuilding from Source
+To update shared components (navigation, footer, guru data) and recompile `public/`:
+
+```bash
+npm run build
+# or: cd src && python3 build.py
 ```
 
-- `src/data.py` — the Society's details, the menu, the gurus, the team, the
-  videos, the picture list, the parts of the flag, the FAQ, page titles and
-  descriptions.
-- `src/content/*.html` — the body of each page.
-- `src/assets/css/site.css`, `src/assets/js/site.js` — design and motion.
-- `src/assets/img/` — the pictures.
+---
 
-The build needs only Python 3. It checks every page as it goes: title and
-description length, one `<h1>` per page, no broken internal links, anchors or
-pictures, valid structured data.
+## 📍 Society Details
 
-**Festival date.** The countdown runs to 25 December 2026, 10:00 AM IST. To
-change it, edit `FESTIVAL_START` near the top of `src/build.py`.
+- **Address:** D.No. 2-86, Kuchipudi Village, Movva Mandal, Krishna District, Andhra Pradesh 521136, India
+- **Phone:** +91 90322 28439
+- **Email:** info.kuchipudiheritage@gmail.com
+- **Festival:** Geeta Saaram Natya Vedam — 25 December 2026, 10:00 AM IST
 
-## Fonts
+---
 
-The site uses Tiro Telugu and Anek Telugu, both under the SIL Open Font
-License. The font files are served from the site itself
-(`public/assets/fonts/`), so there is no call to Google Fonts.
+## 📄 License
+
+This project is licensed under the [Apache 2.0 License](LICENSE).
