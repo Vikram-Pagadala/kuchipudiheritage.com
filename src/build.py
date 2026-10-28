@@ -246,7 +246,23 @@ def block_countdown():
             f'<p class="countdown" data-until="{FESTIVAL_START}" hidden></p>')
 
 
+SOCIAL_ICONS = {
+    "YouTube": '<path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.6V8.4l6.3 3.6-6.3 3.6z"/>',
+    "Instagram": '<path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 4 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.2 4.4 2.6 6.8 7 7C8.3 24 8.7 24 12 24s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.2-4.4-2.6-6.8-7-7C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.9 1.4 1.4 0 0 0 0-2.9z"/>',
+    "Facebook": '<path d="M24 12.07C24 5.45 18.63.07 12 .07S0 5.45 0 12.07c0 5.99 4.39 10.95 10.13 11.85v-8.39H7.08v-3.47h3.05V9.43c0-3.01 1.79-4.67 4.53-4.67 1.31 0 2.69.23 2.69.23v2.95h-1.51c-1.49 0-1.96.93-1.96 1.87v2.25h3.33l-.53 3.47h-2.8v8.39C19.61 23.03 24 18.06 24 12.07z"/>',
+}
+
+
+def social_links(cls="social-icons"):
+    items = "".join(
+        f'<li><a href="{SITE[n.lower()]}" rel="noopener" aria-label="{n}" title="{n}">'
+        f'<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="currentColor">{ic}</svg></a></li>'
+        for n, ic in SOCIAL_ICONS.items())
+    return f'<ul class="{cls}">{items}</ul>'
+
+
 BLOCKS = {
+    "social": social_links,
     "ticker": block_ticker,
     "parade": block_parade,
     "guru_jump": block_guru_jump,
@@ -500,23 +516,21 @@ def footer():
     return (
         '<footer class="site-footer"><div class="wrap footer-grid">'
         '<div class="footer-brand">'
-        f'<span class="footer-logo">{logo_img()}</span>'
-        f'<p class="footer-name">{SITE["name"]}</p>'
-        f'<p>{SITE["tagline"]}</p>'
-        f'<address>{SITE["street"]},<br>{SITE["locality"]},<br>{SITE["region"]} {SITE["postcode"]}, India</address>'
+        f'<div class="footer-id"><span class="footer-logo">{logo_img()}</span>'
+        f'<div><p class="footer-name">{SITE["name"]}</p><p class="footer-tag">{SITE["tagline"]}</p></div></div>'
+        '<p class="footer-follow">Follow us</p>'
+        + social_links("social-icons") +
+        '</div>'
+        '<nav aria-label="Footer"><h2>Explore</h2><ul class="footer-links">'
+        + lst([("/kuchipudi-dance/", "Kuchipudi dance"), ("/kuchipudi-history/", "History"),
+               ("/kuchipudi-gurus/", "Gurus"), ("/kuchipudi-flag/", "The flag"),
+               ("/the-team/", "The team"), ("/events/", "Events"),
+               ("/application-for-institutions/", "Apply"), ("/contact-us/", "Contact us")]) +
+        '</ul></nav>'
+        '<div class="footer-contact"><h2>Reach us</h2>'
+        f'<address>{SITE["street"]}, {SITE["locality"]}, {SITE["region"]} {SITE["postcode"]}</address>'
         f'<p><a href="tel:{SITE["phone_e164"]}">{SITE["phone_display"]}</a><br>'
-        f'<a href="mailto:{SITE["email"]}">{SITE["email"]}</a></p></div>'
-        '<nav aria-label="About Kuchipudi"><h2>Kuchipudi</h2><ul>'
-        + lst([("/kuchipudi-dance/", "Kuchipudi dance"), ("/kuchipudi-history/", "History of Kuchipudi"),
-               ("/kuchipudi-gurus/", "Kuchipudi gurus"), ("/kuchipudi-flag/", "The Kuchipudi flag")]) +
-        '</ul></nav><nav aria-label="The Society"><h2>The Society</h2><ul>'
-        + lst([("/the-team/", "The team"), ("/events/", "Events"),
-               ("/application-for-institutions/", "Application for institutions"), ("/contact-us/", "Contact us")]) +
-        '</ul></nav><nav aria-label="Follow us"><h2>Follow</h2><ul>'
-        f'<li><a href="{SITE["youtube"]}" rel="noopener">YouTube</a></li>'
-        f'<li><a href="{SITE["instagram"]}" rel="noopener">Instagram</a></li>'
-        f'<li><a href="{SITE["facebook"]}" rel="noopener">Facebook</a></li>'
-        '</ul></nav></div>'
+        f'<a href="mailto:{SITE["email"]}">{SITE["email"]}</a></p></div></div>'
         '<div class="wrap footer-base">'
         f'<span>© 2026 {SITE["name"]}</span>'
         f'<span><a href="{url("/privacy-policy/")}">Privacy Policy</a><a href="{url("/terms-and-conditions/")}">Terms and Conditions</a></span>'

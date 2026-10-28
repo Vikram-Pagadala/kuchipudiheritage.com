@@ -619,4 +619,415 @@
       });
     });
   }
+
+  /* 14. Inquiry form on the contact page */
+  var inqForm = doc.getElementById("inquiryForm");
+  if (inqForm) {
+    var inqDone = doc.getElementById("inquiry-done");
+    var inqError = $(".form-error", inqForm);
+    var inqFields = ["inq-name", "inq-email", "inq-topic", "inq-message"];
+    function inqFail(msg, el) {
+      inqError.textContent = msg; inqError.hidden = false;
+      if (el) { el.setAttribute("aria-invalid", "true"); el.focus(); }
+    }
+    inqForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      inqError.hidden = true;
+      $$("[aria-invalid]", inqForm).forEach(function (el) { el.removeAttribute("aria-invalid"); });
+      if (inqForm.elements.website.value) { return; } // honeypot: bots fill it in
+      var f = {};
+      inqFields.forEach(function (id) { f[id] = doc.getElementById(id); });
+      if (!f["inq-name"].value.trim()) { return inqFail("Please enter your name.", f["inq-name"]); }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f["inq-email"].value.trim())) { return inqFail("Please enter a valid email address.", f["inq-email"]); }
+      if (!f["inq-topic"].value) { return inqFail("Please choose a topic.", f["inq-topic"]); }
+      if (f["inq-message"].value.trim().length < 10) { return inqFail("Please write a short message (at least 10 characters).", f["inq-message"]); }
+      // PRE-LAUNCH: `payload` is built but never sent anywhere. Wire this to the
+      // real backend (or a Google Sheet / Apps Script) before launch.
+      var payload = {
+        name: f["inq-name"].value.trim(), email: f["inq-email"].value.trim(),
+        phone: inqForm.elements.phone.value.trim(), topic: f["inq-topic"].value,
+        message: f["inq-message"].value.trim()
+      };
+      void payload;
+      inqForm.hidden = true; $(".reg-test-note", doc.getElementById("inquiry-card")).hidden = true; inqDone.hidden = false;
+    });
+    doc.addEventListener("click", function (e) {
+      if (!e.target.closest('[data-inquiry="reset"]')) { return; }
+      inqForm.reset(); inqForm.hidden = false; inqDone.hidden = true;
+      $(".reg-test-note", doc.getElementById("inquiry-card")).hidden = false;
+    });
+  }
+
+  /* 15. The dancer on the home stage: a one-minute Kuchipudi performance.
+     A jointed figure in full costume is drawn in SVG and moved through a
+     timeline of named poses and facial expressions (abhinaya). Feet always
+     stay on the floor: the hips drop as the knees bend. */
+  var arch = $(".hero-stage .arch");
+  if (arch) {
+    var NS = "http://www.w3.org/2000/svg", GROUND = 322, CX = 150, LOOP = 60;
+    var C = { skin: "#DCA176", neck: "#CF9165", shade: "#A8693F", hair: "#1C0F10", alta: "#B8232B", lip: "#A9343B",
+              kohl: "#140A0A", iris: "#3A2216", brass: "#D9A53A", deep: "#6B0F2B", gold: "#E3B651" };
+    var SKIN = "url(#kd-skin)", GOLD = "url(#kd-gold)", PINK = "url(#kd-pink)", SILK = "url(#kd-silk)";
+    var rad = function (d) { return d * Math.PI / 180; };
+    var V = function (side, deg, len) { return [side * Math.sin(rad(deg)) * len, Math.cos(rad(deg)) * len]; };
+    var add2 = function (a, b) { return [a[0] + b[0], a[1] + b[1]]; };
+    var pt = function (p) { return p[0].toFixed(2) + " " + p[1].toFixed(2); };
+    var lerp = function (a, b, u) { return a + (b - a) * u; };
+    var mix = function (a, b, u) { return [lerp(a[0], b[0], u), lerp(a[1], b[1], u)]; };
+    var norm = function (a) { var l = Math.sqrt(a[0] * a[0] + a[1] * a[1]) || 1; return [a[0] / l, a[1] / l]; };
+    function el(tag, attrs, parent) {
+      var e = doc.createElementNS(NS, tag);
+      for (var k in attrs) { e.setAttribute(k, attrs[k]); }
+      if (parent) { parent.appendChild(e); }
+      return e;
+    }
+    function shape(parent, d, attrs) { attrs.d = d; return el("path", attrs, parent); }
+    // A tapered, round-ended limb through the points p with widths w.
+    function limb(p, w) {
+      var n = p.length, Lp = [], Rp = [], i, d, d1, d2;
+      for (i = 0; i < n; i++) {
+        d = norm([p[Math.min(i + 1, n - 1)][0] - p[Math.max(i - 1, 0)][0], p[Math.min(i + 1, n - 1)][1] - p[Math.max(i - 1, 0)][1]]);
+        if (i > 0 && i < n - 1) {
+          d1 = norm([p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]]); d2 = norm([p[i + 1][0] - p[i][0], p[i + 1][1] - p[i][1]]);
+          d = Math.abs(d1[0] + d2[0]) + Math.abs(d1[1] + d2[1]) < 0.2 ? d1 : norm([d1[0] + d2[0], d1[1] + d2[1]]);
+        }
+        Lp.push([p[i][0] - d[1] * w[i] / 2, p[i][1] + d[0] * w[i] / 2]);
+        Rp.push([p[i][0] + d[1] * w[i] / 2, p[i][1] - d[0] * w[i] / 2]);
+      }
+      var d0 = norm([p[1][0] - p[0][0], p[1][1] - p[0][1]]), dE = norm([p[n - 1][0] - p[n - 2][0], p[n - 1][1] - p[n - 2][1]]);
+      var s = "M" + pt(Lp[0]);
+      for (i = 1; i < n; i++) { s += " L" + pt(Lp[i]); }
+      s += " Q" + pt([p[n - 1][0] + dE[0] * w[n - 1] * 0.7, p[n - 1][1] + dE[1] * w[n - 1] * 0.7]) + " " + pt(Rp[n - 1]);
+      for (i = n - 2; i >= 0; i--) { s += " L" + pt(Rp[i]); }
+      return s + " Q" + pt([p[0][0] - d0[0] * w[0] * 0.7, p[0][1] - d0[1] * w[0] * 0.7]) + " " + pt(Lp[0]) + "Z";
+    }
+    function part(a, b, u0, u1) { return [mix(a, b, u0), mix(a, b, u1)]; }
+
+    /* ---- the figure ---- */
+    var svg = el("svg", { viewBox: "30 40 240 300", "class": "dancer-svg", preserveAspectRatio: "xMidYMax meet", focusable: "false" });
+    var defs = el("defs", {}, svg);
+    function grad(id, kind, attrs, stops) {
+      var gr = el(kind, attrs, defs); gr.setAttribute("id", id);
+      stops.forEach(function (s) { el("stop", { offset: s[0], "stop-color": s[1], "stop-opacity": s[2] == null ? 1 : s[2] }, gr); });
+    }
+    grad("kd-skin", "linearGradient", { x1: 0, y1: 0, x2: 1, y2: 0 }, [[0, "#EBBA8F"], [1, "#C4865A"]]);
+    grad("kd-face", "radialGradient", { cx: .42, cy: .36, r: .72 }, [[0, "#F3CAA3"], [.65, "#DCA176"], [1, "#BF8052"]]);
+    grad("kd-silk", "linearGradient", { x1: 0, y1: 0, x2: 0, y2: 1 }, [[0, "#C42747"], [1, "#7A0E26"]]);
+    grad("kd-pink", "linearGradient", { x1: 0, y1: 0, x2: 1, y2: 0 }, [[0, "#F8BCC9"], [.5, "#EE95A8"], [1, "#D9728B"]]);
+    grad("kd-gold", "linearGradient", { x1: 0, y1: 0, x2: 1, y2: 1 }, [[0, "#FCE7A8"], [.5, "#E3B651"], [1, "#B07B1C"]]);
+    grad("kd-glow", "radialGradient", { cx: .5, cy: .55, r: .5 }, [[0, "#F1D38A", .38], [1, "#F1D38A", 0]]);
+    el("ellipse", { cx: CX, cy: 205, rx: 118, ry: 150, fill: "url(#kd-glow)" }, svg);
+    var g = el("g", {}, svg);
+    var shadow = el("ellipse", { cy: GROUND + 1, rx: 34, ry: 4.5, fill: "rgba(0,0,0,.22)" }, g);
+    var plate = el("g", {}, g);
+    var plateOuter = el("ellipse", { fill: GOLD, stroke: C.deep, "stroke-width": 1.1 }, plate);
+    var plateInner = el("ellipse", { fill: "#F6DB93", opacity: ".6" }, plate);
+
+    // legs: silk trousers with gold cuffs, alta-edged feet and rows of ghungroo
+    var legs = [0, 1].map(function () {
+      return { leg: el("path", { fill: PINK, stroke: "#B85A72", "stroke-width": .5 }, g),
+               fold: el("path", { fill: "none", stroke: "#C9607A", "stroke-width": .7, opacity: ".6" }, g),
+               cuff: el("path", { fill: GOLD }, g), foot: el("g", {}, g), bells: el("g", {}, g) };
+    });
+    legs.forEach(function (l) {
+      shape(l.foot, "M-4 -1 C-5 2 -4.4 4.6 -2 5 L9.6 5 C11.6 5 12.4 3.2 10.8 2.2 C7.6 1 3.6 -.6 2.4 -2Z", { fill: SKIN, stroke: C.alta, "stroke-width": .9 });
+      shape(l.foot, "M6.4 5 L6.6 2.2 M8.4 5 L8.6 2.6", { stroke: C.shade, "stroke-width": .35, opacity: ".7" });
+      [-4.2, -1.4, 1.4, 4.2].forEach(function (x) {
+        el("circle", { cx: x, cy: -2.4, r: 1.35, fill: C.brass, stroke: C.deep, "stroke-width": .3 }, l.bells);
+        el("circle", { cx: x + 1.4, cy: .2, r: 1.35, fill: C.brass, stroke: C.deep, "stroke-width": .3 }, l.bells);
+      });
+    });
+
+    var neck = el("path", { fill: "none", stroke: C.neck, "stroke-width": 9, "stroke-linecap": "round" }, g);
+
+    // trunk, drawn upright about the hips and turned with the lean
+    var body = el("g", {}, g);
+    shape(body, "M-15 -14 C-18 -6 -19 2 -18 7 L18 7 C19 2 18 -6 15 -14Z", { fill: PINK });
+    shape(body, "M-19 -66 C-20 -56 -16 -47 -13 -38 C-11 -30 -11.5 -22 -13.5 -14 L13.5 -14 C11.5 -22 11 -30 13 -38 C16 -47 20 -56 19 -66 Q0 -72 -19 -66Z", { fill: SKIN });
+    shape(body, "M-.7 -27 Q0 -25.4 .7 -27", { fill: "none", stroke: C.shade, "stroke-width": .7 });
+    shape(body, "M-19.5 -66.5 Q0 -72.5 19.5 -66.5 C20 -58 18 -50 15 -42 Q7.5 -38.6 0 -41 Q-7.5 -38.6 -15 -42 C-18 -50 -20 -58 -19.5 -66.5Z", { fill: SILK });
+    shape(body, "M-8.5 -69.6 Q0 -55.5 8.5 -69.6Z", { fill: SKIN });
+    shape(body, "M-8.5 -69.6 Q0 -55.5 8.5 -69.6", { fill: "none", stroke: C.gold, "stroke-width": 1.2 });
+    shape(body, "M-15 -42 Q-7.5 -38.6 0 -41 Q7.5 -38.6 15 -42", { fill: "none", stroke: C.gold, "stroke-width": 2 });
+    shape(body, "M-13 -52 Q-7.5 -44.5 -2 -50 M2 -50 Q7.5 -44.5 13 -52", { fill: "none", stroke: "#4A0716", "stroke-width": .9, opacity: ".45" });
+    shape(body, "M11 -67.5 L18.5 -65 L-4 -15 L-11.5 -15Z", { fill: PINK, stroke: C.gold, "stroke-width": 1 });
+    shape(body, "M-14 -19 Q0 -15.5 14 -19 L14.5 -12.5 Q0 -9 -14.5 -12.5Z", { fill: GOLD, stroke: "#8A5A10", "stroke-width": .5 });
+    el("circle", { cx: 0, cy: -13.4, r: 2.5, fill: C.alta, stroke: C.gold, "stroke-width": .8 }, body);
+    shape(body, "M-6.5 -71 Q0 -64.5 6.5 -71", { fill: "none", stroke: C.gold, "stroke-width": 2.2 });
+    shape(body, "M-9 -69.5 Q-6 -50 0 -48.5 Q6 -50 9 -69.5", { fill: "none", stroke: C.gold, "stroke-width": 1.3 });
+    el("circle", { cx: 0, cy: -47.2, r: 2.6, fill: GOLD, stroke: C.deep, "stroke-width": .5 }, body);
+    el("circle", { cx: 0, cy: -47.2, r: 1.1, fill: C.alta }, body);
+
+    // the pleated fan of the costume, opening as the knees part
+    var fan = el("path", { fill: SILK, stroke: C.deep, "stroke-width": .6, "stroke-linejoin": "round" }, g);
+    var pleats = el("path", { fill: "none", stroke: C.gold, "stroke-width": .8, opacity: ".55" }, g);
+    var hem = el("path", { fill: "none", stroke: C.gold, "stroke-width": 3.2 }, g);
+
+    // arms: half sleeves, armlets (vanki) and bangles; hands hold the mudras
+    var arms = [0, 1].map(function () {
+      return { skin: el("path", { fill: SKIN }, g), sleeve: el("path", { fill: SILK }, g), edge: el("path", { fill: GOLD }, g),
+               armlet: el("path", { fill: GOLD }, g), bangle: el("path", { fill: GOLD }, g), bangle2: el("path", { fill: C.alta }, g) };
+    });
+    var hands = [0, 1].map(function () {
+      var root = el("g", {}, g), mushti = el("g", {}, root), pataka = el("g", {}, root), padma = el("g", {}, root);
+      shape(mushti, "M0 -3.3 C3 -4 6 -4.2 7.8 -3.4 C9.4 -2.6 9.6 2.6 7.8 3.4 C6 4.2 3 4 0 3.3Z", { fill: SKIN });
+      shape(mushti, "M7.4 -2.6 L7.4 2.6 M5.6 -2.9 Q6.6 -1.4 5.6 0 Q6.6 1.4 5.6 2.9", { fill: "none", stroke: C.shade, "stroke-width": .45 });
+      shape(mushti, "M2.6 -3.6 C4.8 -2.2 6 -.6 6.4 1.2", { fill: "none", stroke: C.shade, "stroke-width": .6 });
+      shape(pataka, "M0 -3 C3 -3.6 6 -3.6 8 -3.3 L14 -2.4 C15.6 -2.2 16.4 -1 16.4 0 C16.4 1 15.6 2.2 14 2.4 L8 3.2 C6 3.5 3 3.5 0 3Z", { fill: SKIN });
+      shape(pataka, "M14.2 -2.4 C15.6 -2.2 16.4 -1 16.4 0 C16.4 1 15.6 2.2 14.2 2.4Z", { fill: C.alta });
+      shape(pataka, "M8.5 -1.2 L15.4 -1.1 M8.5 .6 L15.8 .6 M8.3 2 L14.8 2", { fill: "none", stroke: C.shade, "stroke-width": .4 });
+      shape(pataka, "M1.5 -2.8 C3.5 -5 6.5 -5.4 8.2 -4 C7 -3.4 5 -3.2 3 -2.6Z", { fill: SKIN, stroke: C.shade, "stroke-width": .35 });
+      el("circle", { cx: 4.2, cy: 0, r: 1.5, fill: C.alta, opacity: ".55" }, pataka);
+      shape(padma, "M0 -3.4 C3 -4.2 6 -4.4 7.5 -3.6 L7.5 3.6 C6 4.4 3 4.2 0 3.4Z", { fill: SKIN });
+      [[-62, -3.2, 6, 1.9], [-30, -1.8, 7.2, 1.7], [-4, -.2, 7.8, 1.7], [22, 1.5, 7.2, 1.6], [48, 3, 6.2, 1.5]].forEach(function (f) {
+        var a = rad(f[0]), x2 = 7 + Math.cos(a) * f[2], y2 = f[1] + Math.sin(a) * f[2];
+        shape(padma, "M7 " + f[1] + " Q" + pt([7 + Math.cos(a) * f[2] * .6, f[1] + Math.sin(a) * f[2] * .6 - .6]) + " " + pt([x2, y2]),
+              { fill: "none", stroke: C.skin, "stroke-width": f[3], "stroke-linecap": "round" });
+        el("circle", { cx: x2.toFixed(2), cy: y2.toFixed(2), r: f[3] * .45, fill: C.alta }, padma);
+      });
+      el("circle", { cx: 3.8, cy: 0, r: 1.5, fill: C.alta, opacity: ".55" }, padma);
+      return { root: root, shapes: [mushti, pataka, padma] };
+    });
+
+    // head: jasmine, hair with the sun and moon ornaments, jewellery and a face that acts
+    var head = el("g", {}, g), j;
+    for (j = 0; j < 11; j++) {
+      var an = rad(196 + j * 14.8);
+      el("circle", { cx: (Math.cos(an) * 18.4).toFixed(2), cy: (-2 + Math.sin(an) * 18.4).toFixed(2), r: 2.2, fill: "#FFFDF4", stroke: "#D9D0B8", "stroke-width": .3 }, head);
+    }
+    [-1, 1].forEach(function (s) { el("ellipse", { cx: s * 12.6, cy: 0, rx: 2.2, ry: 3.6, fill: C.skin }, head); });
+    shape(head, "M0 -16 C8 -16 12.6 -10 12.6 -2.5 C12.6 6 8.6 13 0 16.2 C-8.6 13 -12.6 6 -12.6 -2.5 C-12.6 -10 -8 -16 0 -16Z", { fill: "url(#kd-face)" });
+    var cheeks = [-1, 1].map(function (s) { return el("ellipse", { cx: s * 7.2, cy: 4.4, rx: 3, ry: 1.9, fill: "#E2725F" }, head); });
+    shape(head, "M-13.6 2 C-15.4 -12 -8.6 -19.6 0 -19.6 C8.6 -19.6 15.4 -12 13.6 2 C13 -2 12.6 -6 11.4 -8.6 C9 -12.4 4.6 -13.4 0 -12.6 C-4.6 -13.4 -9 -12.4 -11.4 -8.6 C-12.6 -6 -13 -2 -13.6 2Z", { fill: C.hair });
+    shape(head, "M-11 -8.4 Q-6 -13.2 0 -12.4 Q6 -13.2 11 -8.4", { fill: "none", stroke: C.gold, "stroke-width": .9 });
+    shape(head, "M0 -19.4 L0 -12", { stroke: C.gold, "stroke-width": .7 });
+    el("circle", { cx: 0, cy: -11.2, r: 1.7, fill: GOLD, stroke: "#8A5A10", "stroke-width": .3 }, head);
+    el("ellipse", { cx: 0, cy: -9.3, rx: .9, ry: 1.2, fill: C.alta }, head);
+    el("circle", { cx: 8.6, cy: -15.4, r: 3, fill: GOLD, stroke: "#8A5A10", "stroke-width": .4 }, head);
+    el("circle", { cx: 8.6, cy: -15.4, r: 1.3, fill: C.alta }, head);
+    shape(head, "M-11.2 -17.6 A3.2 3.2 0 1 0 -6 -13.2 A2.6 2.6 0 1 1 -11.2 -17.6Z", { fill: GOLD, stroke: "#8A5A10", "stroke-width": .3 });
+    var brows = [0, 1].map(function () { return el("path", { fill: "none", stroke: C.hair, "stroke-width": 1.15, "stroke-linecap": "round" }, head); });
+    var eyes = [-1, 1].map(function (s, k) {
+      var e = { s: s };
+      e.crease = el("path", { fill: "none", stroke: C.shade, "stroke-width": .5, opacity: ".55" }, head);
+      e.white = el("path", { fill: "#FBF5EC" }, head);
+      e.clip = el("path", {}, el("clipPath", { id: "kd-eye" + k }, defs));
+      e.iris = el("g", {}, el("g", { "clip-path": "url(#kd-eye" + k + ")" }, head));
+      el("circle", { r: 2.05, fill: C.iris }, e.iris);
+      el("circle", { r: .95, fill: "#050303" }, e.iris);
+      el("circle", { cx: .6, cy: -.6, r: .5, fill: "#fff" }, e.iris);
+      e.upper = el("path", { fill: "none", stroke: C.kohl, "stroke-width": 1.15, "stroke-linecap": "round", "stroke-linejoin": "round" }, head);
+      e.lower = el("path", { fill: "none", stroke: C.kohl, "stroke-width": .55 }, head);
+      return e;
+    });
+    shape(head, "M-.6 -1.5 Q-1.2 3.5 -2.3 5.6 Q-1.2 6.9 0 6.5 Q1.2 6.9 2.3 5.6", { fill: "none", stroke: C.shade, "stroke-width": .7, "stroke-linecap": "round" });
+    el("circle", { cx: 2.7, cy: 6.4, r: 1.7, fill: "none", stroke: C.gold, "stroke-width": .55 }, head);
+    el("circle", { cx: 2.7, cy: 8.1, r: .55, fill: "#fff" }, head);
+    el("circle", { cx: 0, cy: -6.8, r: 1.05, fill: "#B3121E" }, head);
+    var mouth = { open: el("path", { fill: "#4A1416" }, head), teeth: el("path", { fill: "#FBF5EC" }, head),
+                  upper: el("path", { fill: C.lip }, head), lower: el("path", { fill: "#BC4A50" }, head) };
+    shape(head, "M-3 14 Q0 15.4 3 14", { fill: "none", stroke: C.shade, "stroke-width": .5, opacity: ".5" });
+    [-1, 1].forEach(function (s) {
+      var jh = el("g", { transform: "translate(" + s * 12.8 + " 3)" }, head);
+      el("circle", { r: 1.2, fill: GOLD }, jh);
+      shape(jh, "M-2.4 5.6 Q-2.4 1.6 0 1.6 Q2.4 1.6 2.4 5.6Z", { fill: GOLD, stroke: "#8A5A10", "stroke-width": .3 });
+      [-1.6, 0, 1.6].forEach(function (x) { el("circle", { cx: x, cy: 6.4, r: .55, fill: "#fff" }, jh); });
+    });
+    var pot = el("g", {}, head);
+    el("ellipse", { cx: 0, cy: -29, rx: 10.5, ry: 9.5, fill: GOLD, stroke: C.deep, "stroke-width": .9 }, pot);
+    shape(pot, "M-7 -30 Q0 -25 7 -30", { fill: "none", stroke: C.deep, "stroke-width": .8 });
+    el("rect", { x: -5.5, y: -41.5, width: 11, height: 5, rx: 2, fill: GOLD, stroke: C.deep, "stroke-width": .6 }, pot);
+    el("ellipse", { cx: 0, cy: -46.5, rx: 2.6, ry: 4.6, fill: "#FFD27A" }, pot);
+    el("ellipse", { cx: 0, cy: -45.6, rx: 1.1, ry: 2.2, fill: "#FFF4D0" }, pot);
+
+    var host = doc.createElement("div"); host.className = "dancer";
+    host.setAttribute("aria-hidden", "true");
+    host.appendChild(svg);
+    arch.appendChild(host);
+    var cap = doc.createElement("p"); cap.className = "dance-cap"; arch.appendChild(cap);
+    var btn = doc.createElement("button"); btn.type = "button"; btn.className = "dance-toggle";
+    arch.parentNode.appendChild(btn);
+
+    function face(q, blink) {
+      var open = Math.max(.04, q.eo * blink);
+      eyes.forEach(function (e) {
+        var s = e.s, cx = s * 5.4, cy = -2.4, up = 2.6 * open, lo = 1.3 * Math.min(open, 1.1);
+        var a = [cx - s * 3.4, cy + .3], b = [cx + s * 3.6, cy - .3];
+        var top = " Q" + pt([cx - s * .4, cy - up * 1.25]) + " ", bot = " Q" + pt([cx, cy + lo * 1.3]) + " ";
+        var d = "M" + pt(a) + top + pt(b) + bot + pt(a) + "Z";
+        e.white.setAttribute("d", d); e.clip.setAttribute("d", d);
+        e.upper.setAttribute("d", "M" + pt(a) + top + pt(b) + " L" + pt([b[0] + s * 2, b[1] - 1.3]));
+        e.lower.setAttribute("d", "M" + pt(a) + bot + pt(b));
+        e.crease.setAttribute("d", "M" + pt([a[0], a[1] - 1.2 - up * .45]) + " Q" + pt([cx - s * .4, cy - up * 1.25 - 1.9]) + " " + pt([b[0], b[1] - 1.4]));
+        e.iris.setAttribute("transform", "translate(" + pt([cx + q.gz * 1.3, cy - .2 + q.gy * .7]) + ")");
+      });
+      brows.forEach(function (b, k) {
+        var s = k ? 1 : -1;
+        b.setAttribute("d", "M" + pt([s * 2.4, -6.4 - q.br * 1.1 - q.bi * 1.4]) + " Q" + pt([s * 6.2, -10 - q.br * 1.5 - q.bi * .3]) + " " + pt([s * 10.2, -6.9 - q.br * .8]));
+      });
+      var w = 3.6 + q.sm * .8, Ly = 9.6 - q.sm * 1.3, yT = 9.8 + q.sm * .45, mo = Math.max(0, q.mo), yB = yT + mo * 3;
+      var Lc = pt([-w, Ly]), Rc = pt([w, Ly]);
+      var arc = function (y) { return " Q" + pt([0, 2 * y - Ly]) + " "; };
+      mouth.upper.setAttribute("d", "M" + Lc + " Q" + pt([-w * .5, 8]) + " " + pt([0, 8.7]) + " Q" + pt([w * .5, 8]) + " " + Rc + arc(yT) + Lc + "Z");
+      mouth.open.setAttribute("d", mo > .04 ? "M" + Lc + arc(yT) + Rc + arc(yB) + Lc + "Z" : "");
+      mouth.teeth.setAttribute("d", mo > .15 ? "M" + Lc + arc(yT) + Rc + arc(yT + Math.min(mo * 3, 1.3)) + Lc + "Z" : "");
+      mouth.lower.setAttribute("d", "M" + Lc + arc(yB) + Rc + arc(yB + 1.8) + Lc + "Z");
+      cheeks.forEach(function (c) { c.setAttribute("opacity", (.16 + .14 * Math.max(0, q.sm)).toFixed(2)); });
+    }
+
+    function draw(q, blink) {
+      var L = { thigh: 56, shin: 56, torso: 70, upper: 34, fore: 30 };
+      var reach = function (t, k) { return L.thigh * Math.cos(rad(t)) + L.shin * Math.cos(rad(t - k)); };
+      var hipY = GROUND - 4 - Math.max(reach(q.tl, q.kl), reach(q.tr, q.kr));
+      var hip = [CX + q.sx, hipY], ln = rad(q.lean), cs = Math.cos(ln), sn = Math.sin(ln), sides = [-1, 1];
+      var R = function (p) { return [hip[0] + p[0] * cs - p[1] * sn, hipY + p[0] * sn + p[1] * cs]; };
+      var thigh = [q.tl, q.tr], bend = [q.kl, q.kr], knees = [];
+      shadow.setAttribute("cx", hip[0].toFixed(1));
+      sides.forEach(function (sd, i) {
+        var top = [hip[0] + sd * 8, hipY - 4], l = legs[i];
+        var knee = knees[i] = add2(top, V(sd, thigh[i], L.thigh)), ankle = add2(knee, V(sd, thigh[i] - bend[i], L.shin));
+        l.leg.setAttribute("d", limb([top, knee, ankle], [15, 11.5, 8]));
+        l.fold.setAttribute("d", "M" + pt(mix(top, knee, .25)) + " L" + pt(knee) + " L" + pt(mix(knee, ankle, .78)));
+        l.cuff.setAttribute("d", limb(part(knee, ankle, .8, .96), [9.6, 9.4]));
+        l.foot.setAttribute("transform", "translate(" + pt(ankle) + ") scale(" + sd + " 1)");
+        l.bells.setAttribute("transform", "translate(" + pt(ankle) + ")");
+      });
+      body.setAttribute("transform", "translate(" + pt(hip) + ") rotate(" + q.lean.toFixed(2) + ")");
+      var spread = Math.abs(knees[1][0] - knees[0][0]) / 2, fw = Math.max(18, spread * 0.75) + q.flare * 36;
+      var by = Math.min(hipY + 58, GROUND - 8), fanTop = hipY - 6, i, pd = "";
+      fan.setAttribute("d", "M" + pt([hip[0] - 9, fanTop]) + " L" + pt([hip[0] + 9, fanTop]) + " L" + pt([hip[0] + fw, by]) + " Q" + pt([hip[0], by + 9]) + " " + pt([hip[0] - fw, by]) + "Z");
+      for (i = 0; i < 7; i++) { pd += "M" + pt([hip[0] + (i - 3) * 2.6, fanTop + 2]) + " L" + pt([hip[0] + (i - 3) * fw / 3.2, by + 2]) + " "; }
+      pleats.setAttribute("d", pd);
+      hem.setAttribute("d", "M" + pt([hip[0] - fw + 1.5, by - 1.4]) + " Q" + pt([hip[0], by + 7.4]) + " " + pt([hip[0] + fw - 1.5, by - 1.4]));
+      // neck and head
+      var N = R([0, -70]), hd = ln + rad(q.head) * 0.6, H = [N[0] + 27 * Math.sin(hd) + q.hs, N[1] - 27 * Math.cos(hd)];
+      neck.setAttribute("d", "M" + pt(N) + " L" + pt(mix(N, H, .62)));
+      head.setAttribute("transform", "translate(" + pt(H) + ") rotate(" + (q.head + q.lean * 0.5).toFixed(2) + ") scale(.92)");
+      pot.setAttribute("opacity", q.pot.toFixed(2));
+      face(q, blink);
+      // arms and the hand shapes (mudras)
+      var S = [R([-19, -65]), R([19, -65])], A = [q.al, q.ar], E = [q.el, q.er], Hs = [q.hl, q.hr];
+      sides.forEach(function (sd, k) {
+        var elbow = add2(S[k], V(sd, A[k], L.upper)), wrist = add2(elbow, V(sd, A[k] + E[k], L.fore)), a = arms[k];
+        a.skin.setAttribute("d", limb([S[k], elbow, wrist], [8.4, 6.2, 4.6]));
+        a.sleeve.setAttribute("d", limb(part(S[k], elbow, 0, .42), [11, 9.4]));
+        a.edge.setAttribute("d", limb(part(S[k], elbow, .38, .46), [9.8, 9.5]));
+        a.armlet.setAttribute("d", limb(part(S[k], elbow, .66, .74), [7.2, 7]));
+        a.bangle.setAttribute("d", limb(part(elbow, wrist, .8, .9), [5.8, 5.6]));
+        a.bangle2.setAttribute("d", limb(part(elbow, wrist, .9, .96), [5.4, 5.2]));
+        var u = norm([wrist[0] - elbow[0], wrist[1] - elbow[1]]), v = sd < 0 ? [u[1], -u[0]] : [-u[1], u[0]];
+        hands[k].root.setAttribute("transform", "matrix(" + [u[0], u[1], v[0], v[1], wrist[0] - u[0], wrist[1] - u[1]].map(function (x) { return x.toFixed(3); }).join(" ") + ")");
+        var m = Math.round(Hs[k]);
+        hands[k].shapes.forEach(function (s, n) { s.setAttribute("display", n === m ? "inline" : "none"); });
+      });
+      // the brass plate of the Tarangam
+      plate.setAttribute("opacity", q.plate.toFixed(2));
+      [plateOuter, plateInner].forEach(function (e, k) {
+        e.setAttribute("cx", hip[0].toFixed(1)); e.setAttribute("cy", (GROUND + 2).toFixed(1));
+        e.setAttribute("rx", k ? 38 : 46); e.setAttribute("ry", k ? 4.5 : 7);
+      });
+      // a turn: the figure narrows and flips as it spins about its own axis
+      var sc = Math.cos(rad(q.spin));
+      if (Math.abs(sc) < 0.38) { sc = sc < 0 ? -0.38 : 0.38; }   // seen side-on, a body still has depth
+      g.setAttribute("transform", "translate(" + CX + " 0) scale(" + sc.toFixed(3) + " 1) translate(" + (-CX) + " 0)");
+    }
+
+    /* ---- the choreography: 60 seconds of moves and expressions ----
+       Face: br brows up, bi inner brows up (sorrow), eo eyes open, sm smile,
+       mo mouth open, gz/gy where the eyes look. */
+    var D = { sx: 0, lean: 0, head: 0, hs: 0, gz: 0, gy: 0, br: 0, bi: 0, eo: 1, sm: .4, mo: 0,
+              tl: 3, kl: 0, tr: 3, kr: 0, al: 12, el: 8, ar: 12, er: 8, hl: 1, hr: 1, spin: 0, plate: 0, pot: 0, flare: 0 };
+    function M() {
+      var r = {}, i, k;
+      for (k in D) { r[k] = D[k]; }
+      for (i = 0; i < arguments.length; i++) { for (k in arguments[i]) { r[k] = arguments[i][k]; } }
+      return r;
+    }
+    var NAM = { al: 25, el: 216, ar: 25, er: 216, sm: .6, eo: .9 };     // hands joined at the chest, serene
+    var MAN = { tl: 48, kl: 48, tr: 48, kr: 48 };                       // araimandi, the half-sit
+    var HALF = { tl: 30, kl: 30, tr: 30, kr: 30 };
+    var WIDE = { tl: 36, kl: 22, tr: 36, kr: 22 };
+    var KATI = { al: 70, el: 230, ar: 70, er: 230, hl: 0, hr: 0 };       // fists at the waist
+    var VEERA = { br: -.35, eo: 1.15, sm: .25 };
+    var SRINGARA = { br: .25, eo: .72, sm: .8 };
+    var HASYA = { sm: 1, mo: .45, eo: .95 };
+    var TAR = { tl: 20, kl: 0, tr: 20, kr: 0, plate: 1, pot: 1, al: 138, el: 55, ar: 138, er: 55, eo: .62, gy: .9, sm: .45, br: .1 };
+    var KF = [];
+    function key(t, p, name, lin) { KF.push({ t: t, p: p, name: name || "", lin: !!lin }); }
+    key(0, M(NAM), "Namaskaram");
+    key(2, M(NAM, { head: 12, eo: .35, gy: .9 }));
+    key(3.5, M(NAM));
+    key(4.2, M(MAN, KATI, VEERA), "Araimandi");
+    key(7.5, M(MAN, KATI, VEERA, { head: 6, gz: 1 }));
+    var tri = { al: 95, el: 10, ar: 150, er: 40, hr: 2 }, tri2 = { al: 150, el: 40, ar: 95, er: 10, hl: 2 };
+    key(8.5, M(HALF, tri, SRINGARA, { lean: -10, sx: -8, head: -14, hs: -4, gz: -1 }), "Tribhanga");
+    key(10.5, M(HALF, tri2, SRINGARA, { lean: 10, sx: 8, head: 14, hs: 4, gz: 1 }));
+    key(12.5, M(HALF, tri, SRINGARA, { lean: -10, sx: -8, head: -14, hs: -4, gz: -1 }));
+    var b, odd, hs, joy = { sm: .9, mo: .18, eo: 1.05 };
+    for (b = 0; b < 16; b++) {                                         // tattu adavu: stamps and lifts on the beat
+      odd = b % 2; hs = odd ? 5 : -5;
+      key(14 + b * 0.5, M(MAN, KATI, joy, { hs: hs, head: hs, gz: odd ? .8 : -.8 }), b ? "" : "Tattu adavu");
+      key(14.25 + b * 0.5, M(MAN, KATI, joy, odd ? { tr: 8, kr: 105 } : { tl: 8, kl: 105 }, { hs: hs, head: hs, sx: odd ? 4 : -4, gz: odd ? .8 : -.8 }));
+    }
+    key(22.2, M(MAN, { al: 80, el: 200, ar: 80, er: 200, sm: .5 }), "Hasta mudras");
+    key(24, M(MAN, { al: 110, el: 150, ar: 110, er: 150, hl: 2, hr: 2, head: 6, br: 1, bi: .3, eo: 1.3, mo: .55, sm: .1, gy: -.6 }), "Adbhuta: wonder");
+    key(26, M(MAN, { al: 140, el: 90, ar: 140, er: 90, hl: 2, hr: 2, head: -6, br: .1, bi: 1, eo: .75, sm: -.5, gy: .6 }), "Karuna: compassion");
+    key(28, M(MAN, { al: 60, el: -40, ar: 60, er: -40, hl: 0, hr: 0, br: -.6, eo: 1.2, sm: -.1 }), "Veera: courage");
+    key(29.5, M(MAN, { al: 90, el: 0, ar: 90, er: 0 }));
+    key(30.5, M(WIDE, HASYA, { al: 90, el: 0, ar: 90, er: 0 }), "Hasya: joy");
+    key(32.5, M(WIDE, HASYA, { al: 160, el: 10, ar: 30, er: 0, hl: 2, lean: 8, sx: 6, head: 10, hs: 4, gz: 1 }));
+    key(34.5, M(WIDE, HASYA, { al: 30, el: 0, ar: 160, er: 10, hr: 2, lean: -8, sx: -6, head: -10, hs: -4, gz: -1 }));
+    var turn = { al: 95, el: 0, ar: 95, er: 0, hl: 2, hr: 2, sm: .8, eo: .95 };
+    key(36, M(turn), "Bhramari, the spin");
+    key(37, M(turn, { flare: 1 }));
+    key(43, M(turn, { flare: 1, spin: 360 * 6 }), "", true);
+    key(43.8, M(turn, { spin: 360 * 6 }));
+    key(44.8, M(TAR), "Tarangam");
+    for (b = 0; b < 11; b++) {                                         // rocking on the rim of the plate
+      var sd = b % 2 ? -1 : 1;
+      key(45.8 + b * 0.75, M(TAR, { sx: sd * 12, lean: sd * 7, head: sd * 10, hs: sd * 5 }, sd > 0 ? { tl: 20, kl: 80 } : { tr: 20, kr: 80 }));
+    }
+    key(54.4, M(TAR));
+    key(55.8, M(NAM), "Pranamam");
+    key(57.6, M(NAM, { head: 16, lean: 3, eo: .05 }));
+    key(59, M(NAM));
+    key(60, M(NAM));
+
+    function pose(T) {
+      var i = 0, a, b2, u, q = {}, k;
+      while (i < KF.length - 2 && KF[i + 1].t <= T) { i++; }
+      a = KF[i]; b2 = KF[i + 1];
+      u = Math.min(1, Math.max(0, (T - a.t) / (b2.t - a.t)));
+      if (!b2.lin) { u = u * u * (3 - 2 * u); }
+      for (k in D) { q[k] = lerp(a.p[k], b2.p[k], u); }
+      for (var j = 0; j <= i + 1; j++) { if (KF[j].name && KF[j].t <= T) { q.name = KF[j].name; } }
+      return q;
+    }
+
+    /* ---- playback: runs only while it is on screen and the viewer has not paused it ---- */
+    var T = 0, last = 0, raf = 0, onScreen = true, paused = calm, shown = "";
+    function frame(now) {
+      var dt = Math.min(0.1, (now - last) / 1000);
+      last = now; T = (T + dt) % LOOP;
+      show(); raf = requestAnimationFrame(frame);
+    }
+    function show() {
+      var ph = T % 3.9, blink = ph < .16 ? Math.abs(ph - .08) / .08 : 1;
+      var q = pose(T); draw(q, blink);
+      if (q.name !== shown) { shown = q.name; cap.textContent = shown; }
+    }
+    function sync() {
+      var run = !paused && onScreen && !doc.hidden;
+      if (run && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
+      if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
+      btn.textContent = paused ? "▶" : "❚❚";
+      btn.setAttribute("aria-label", paused ? "Play the dance" : "Pause the dance");
+    }
+    btn.addEventListener("click", function () { paused = !paused; sync(); });
+    doc.addEventListener("visibilitychange", sync);
+    if ("IntersectionObserver" in win) {
+      new IntersectionObserver(function (es) { onScreen = es[0].isIntersecting; sync(); }, { threshold: 0.05 }).observe(arch);
+    }
+    show(); sync();
+  }
 })();

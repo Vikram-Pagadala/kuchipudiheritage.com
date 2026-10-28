@@ -17,11 +17,7 @@
       <div>
         <dt>Follow</dt>
         <dd>
-          <ul class="social">
-            <li><a href="[[site:youtube]]" rel="noopener">YouTube</a></li>
-            <li><a href="[[site:instagram]]" rel="noopener">Instagram</a></li>
-            <li><a href="[[site:facebook]]" rel="noopener">Facebook</a></li>
-          </ul>
+          [[block:social]]
         </dd>
       </div>
     </dl>
@@ -36,11 +32,63 @@
 
   <div class="stack">
     <h2 id="inquiry">Send us your inquiry</h2>
-    <p>Fill in the form and we will get back to you soon. You can write to us about a general inquiry, a collaboration or media request, feedback or a suggestion, or information on an event or festival.</p>
-    [[if:prod]]<div class="embed embed-form">
-      <iframe src="[[site:form_contact]]?embedded=true" title="Inquiry form: Kuchipudi Heritage Arts Society" loading="lazy">Loading the inquiry form…</iframe>
-    </div>[[/if]][[if:preview]]<div class="embed"><div class="embed-fallback"><p>The inquiry form appears here on the live site.</p></div></div>[[/if]]
-    <p><a class="link" href="[[site:form_contact]]" rel="noopener">Open the inquiry form in a new tab</a></p>
+    <p>Write to us about a general inquiry, a collaboration or media request, feedback or a suggestion, or information on an event or festival.</p>
+
+    <div class="reg-portal-card inquiry-card" id="inquiry-card">
+      <!-- PRE-LAUNCH: nothing is sent yet. See CLAUDE.md, "Launch checklist". -->
+      <p class="reg-test-note" role="note"><strong>Test mode.</strong> This form is not sending messages yet. Please use the Google Form below for now.</p>
+      <form id="inquiryForm" novalidate>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="inq-name">Full Name *</label>
+            <input type="text" id="inq-name" name="name" autocomplete="name" placeholder="e.g. Aditi Sharma" required>
+          </div>
+          <div class="input-group">
+            <label for="inq-email">Email Address *</label>
+            <input type="email" id="inq-email" name="email" autocomplete="email" placeholder="e.g. user@gmail.com" required>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="inq-phone">Phone (optional)</label>
+            <input type="tel" id="inq-phone" name="phone" autocomplete="tel" inputmode="tel" maxlength="15" placeholder="e.g. 9876543210">
+          </div>
+          <div class="input-group">
+            <label for="inq-topic">Topic *</label>
+            <select id="inq-topic" name="topic" required>
+              <option value="" disabled selected>Select a topic</option>
+              <option>General inquiry</option>
+              <option>Collaboration or media request</option>
+              <option>Feedback or suggestion</option>
+              <option>Event or festival information</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="inq-message">Message *</label>
+          <textarea id="inq-message" name="message" rows="4" maxlength="2000" placeholder="How can we help?" required></textarea>
+        </div>
+        <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <p class="form-error" role="alert" hidden></p>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Send inquiry</button>
+        </div>
+      </form>
+      <div class="inquiry-done" id="inquiry-done" hidden>
+        <div class="success-icon" aria-hidden="true">&#10003;</div>
+        <h3 class="step-heading">Thank you</h3>
+        <p>This was a test run: your message was not sent. Please use the Google Form below to reach us.</p>
+        <button type="button" class="btn btn-primary" data-inquiry="reset">Write another</button>
+      </div>
+    </div>
+
+    <details class="alt-form">
+      <summary>Prefer Google Forms? Use our form instead</summary>
+      [[if:prod]]<div class="embed embed-form">
+        <iframe src="[[site:form_contact]]?embedded=true" title="Inquiry form: Kuchipudi Heritage Arts Society" loading="lazy">Loading the inquiry form…</iframe>
+      </div>[[/if]][[if:preview]]<div class="embed"><div class="embed-fallback"><p>The inquiry form appears here on the live site.</p></div></div>[[/if]]
+      <p><a class="link" href="[[site:form_contact]]" rel="noopener">Open the inquiry form in a new tab</a></p>
+    </details>
     <div class="callout">
       <h3>Applying for Geeta Saaram Natya Vedam 2026?</h3>
       <p>Gurus and institutions should use the application form, not this one. Applications close on 30 November 2026.</p>

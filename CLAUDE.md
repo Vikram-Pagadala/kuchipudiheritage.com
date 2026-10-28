@@ -31,6 +31,13 @@ Registration portal (`/application-for-institutions/`)
 - [ ] Fallback option: `SITE["form_apply"]` in `src/data.py` is a Google Form
       for applications. It is currently unused. Linking to it is the quickest
       way to launch if the payment integration is not ready.
+- [ ] **Inquiry form is a mock too.** The built-in form on `/contact-us/`
+      (`#inquiryForm`, section 14 of `site.js`) validates and builds a
+      `payload` but sends it nowhere. Wire it to a backend / Apps Script, then
+      remove its `.reg-test-note` and the "This was a test run" text in
+      `src/content/contact-us.html`. Until then the Google Form
+      (`SITE["form_contact"]`) in the "Prefer Google Forms?" panel is the
+      working channel.
 - [ ] Fees (₹500 individual, ₹400 per student) are hard-coded in
       `regState` in `site.js`, in the page copy, and in the DanceEvent
       schema in `src/build.py`. Confirm them with the Society, and keep the three in sync.
