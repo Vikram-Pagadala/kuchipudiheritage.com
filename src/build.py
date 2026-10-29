@@ -361,6 +361,13 @@ def org_node():
             "postalCode": SITE["postcode"],
             "addressCountry": SITE["country"],
         },
+        "location": {
+            "@type": "Place", "name": "Kuchipudi village",
+            "geo": {"@type": "GeoCoordinates", "latitude": 16.2545, "longitude": 80.8997},
+            "hasMap": SITE["map_link"],
+        },
+        "founder": [{"@type": "Person", "@id": D.DOMAIN + "/the-team/#" + t["id"], "name": t["schema_name"]}
+                    for t in D.TEAM if t["id"] in ("kiran-vedantam", "vedantam-venkata-naga-chalapathi-rao")],
         "sameAs": [SITE["youtube"], SITE["instagram"], SITE["facebook"]],
         "knowsAbout": ["Kuchipudi", "Indian classical dance", "Bhama Kalapam", "Yakshagana", "Siddhendra Yogi"],
     }
@@ -442,7 +449,7 @@ def schema(page):
                          "address": {"@type": "PostalAddress", "streetAddress": SITE["street"],
                                      "addressLocality": "Kuchipudi, Movva Mandal, Krishna District",
                                      "addressRegion": "Andhra Pradesh", "postalCode": "521136", "addressCountry": "IN"}},
-            "organizer": {"@id": ORG_ID}, "image": D.DOMAIN + "/assets/img/kuchipudi-dance-confluence-2026-poster.webp",
+            "organizer": {"@id": ORG_ID, "@type": "Organization", "name": SITE["name"], "url": D.DOMAIN + "/"}, "image": D.DOMAIN + "/assets/img/kuchipudi-dance-confluence-2026-poster.webp",
         })
         graph.append({
             "@type": "DanceEvent", "@id": here + "#swarnotsavalu",
@@ -454,7 +461,7 @@ def schema(page):
             "location": {"@type": "Place", "name": "Kuchipudi village",
                          "address": {"@type": "PostalAddress", "addressLocality": "Kuchipudi, Movva Mandal, Krishna District",
                                      "addressRegion": "Andhra Pradesh", "postalCode": "521136", "addressCountry": "IN"}},
-            "organizer": {"@id": ORG_ID}, "image": D.DOMAIN + "/assets/img/videos/HuWoA4w-sdI.webp",
+            "organizer": {"@id": ORG_ID, "@type": "Organization", "name": SITE["name"], "url": D.DOMAIN + "/"}, "image": D.DOMAIN + "/assets/img/videos/HuWoA4w-sdI.webp",
         })
     if page["path"] == "/application-for-institutions/":
         graph.append({
@@ -468,7 +475,7 @@ def schema(page):
                          "address": {"@type": "PostalAddress", "streetAddress": SITE["street"],
                                      "addressLocality": "Kuchipudi, Movva Mandal, Krishna District",
                                      "addressRegion": "Andhra Pradesh", "postalCode": "521136", "addressCountry": "IN"}},
-            "organizer": {"@id": ORG_ID}, "image": D.DOMAIN + "/assets/img/kuchipudi-dance-confluence-2026-poster.webp",
+            "organizer": {"@id": ORG_ID, "@type": "Organization", "name": SITE["name"], "url": D.DOMAIN + "/"}, "image": D.DOMAIN + "/assets/img/kuchipudi-dance-confluence-2026-poster.webp",
             "offers": {
                 "@type": "Offer",
                 "url": here,

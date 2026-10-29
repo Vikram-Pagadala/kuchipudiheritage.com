@@ -6,7 +6,7 @@ Edit this file, then run `python3 build.py`.
 """
 
 DOMAIN = "https://kuchipudiheritage.com"
-BUILD_DATE = "2026-10-11"
+BUILD_DATE = "2026-10-29"
 
 # Google Search Console verification meta tag content string (e.g., "abcdef123456...").
 # If provided, it is automatically injected into the <head> of every page.
